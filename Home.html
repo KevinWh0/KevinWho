@@ -122,6 +122,37 @@ h1 {
   left: 16px;
   border-radius: 50%;
 }
+
+
+.collapsible {
+  position: absolute;
+  top: 25px;
+  left: 70px;
+  cursor: pointer;
+  width: 0%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+.content {
+    position: absolute;
+  top: 25px;
+  left: 100px;
+  
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  font-size: 14px;
+  text-shadow: 1px 1px #808080;
+}
+.triangle-right {
+	width: 0;
+	height: 0;
+	border-top: 12.5px solid transparent;
+	border-left: 25px solid #555;
+	border-bottom: 12.5px solid transparent;
+}
 </style>
   
 </head>
@@ -146,10 +177,24 @@ h1 {
 
 <div class="container">
 
-  <img src="https://kevinwh0.github.io/kevinwho/background-balance-business-583846.jpg" alt="Pineapple" width="110%" class="banner">
+  <img src="https://kevinwh0.github.io/kevinwho/background-balance-business-583846.jpg" alt="Work" width="110%" class="banner">
+  
+  
+  
+<button class="collapsible"><div class="triangle-right"></div>
+</button>
+
+<div class="content">Welcome to my channel site, I hope you enjoy my channel.</p>
+</div>
+  
   
   <a href="https://www.youtube.com/channel/UCcF2MRWI9ZhOfA9KV4v2YiA">  
 <img src="https://kevinwh0.github.io/kevinwho/Logo.jpg"  alt="My Logo" class="Logo" width="10%"></a>
+
+
+
+
+
 
 
 
@@ -167,5 +212,25 @@ h1 {
   <p><strong>Warning!</strong> This website is far from done, and buggy</p>
 </div>
 	
+    
+    
+    
+    
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
 </body>
 </html>
