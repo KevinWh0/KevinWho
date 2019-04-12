@@ -391,6 +391,10 @@ h1 {
     
 	<iframe src="https://youcount.github.io/e/#!/Kevin-Who" height="100" width="250" frameborder="0"></iframe>
     <p>Hello, I'm Kevin Who, a small YouTuber who may grow, but that's all up to you guys I guess. Thanks if you are already subbed, if not it would help me out a lot. Also, note I can't post often due to school and stuff and I will try my best to post when I can. Show your support so when I escape, I mean finish school, I can use this as my job and continue to pump out great content. On the other hand, if you think my content needs improvement there is always the comments for you to go to and tell me what you want to see. Have a nice day.</p>
+  <br>
+  <br>
+<p id="demo"></p>
+ 
         
         
         
@@ -410,6 +414,37 @@ for (i = 0; i < coll.length; i++) {
     }
   });
 }
+
+
+// Set the date we're counting down to
+var countDownDate = new Date("May 1, 2019 15:00:00").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get todays date and time
+  var now = new Date().getTime();
+    
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+    
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="demo"
+  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s "+ " Left until my next big release";
+    
+  // If the count down is over, write some text 
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "It seems its taking longer than expected oops. ):";
+  }
+}, 1000);
+
 </script>
 </body>
 </html>
