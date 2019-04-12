@@ -425,7 +425,7 @@ function getVote(int) {
       document.getElementById("poll").innerHTML=this.responseText;
     }
   }
-  xmlhttp.open("GET","https://kevinwh0.github.io/kevinwho/poll_vote.php?vote="+int,true);
+  xmlhttp.open("GET","poll_vote.php?vote="+int,true);
   xmlhttp.send();
 }
 
