@@ -106,7 +106,8 @@ position: absolute;
 </style>
   
 </head>
-<body>
+<body onload="Visible()">
+
 
 
 
@@ -123,6 +124,12 @@ position: absolute;
     </div>
   </li>
 </ul> 
+
+<p id = "Loader">Hacking the mainframe, please wait...</p>
+
+<div id = "Page">
+
+
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/TN5_Hh-7SbI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class = "Top"></iframe>
 
@@ -209,7 +216,23 @@ position: absolute;
 <iframe width="280" height="157" src="https://www.youtube.com/embed/OP_01LPMuJU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 </div>
+</div>
+<script>
 
+var Loader = document.getElementById("Loader");
+
+var x = document.getElementById("Page");
+x.style.display = "none";
+
+
+function Visible() {
+Loader.style.display = "none";
+x.style.display = "block";
+
+
+}
+
+</script>
 
 
 </body>
