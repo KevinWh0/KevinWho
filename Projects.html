@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KevinWho - Home</title>
+  <link rel="shortcut icon" type="image/png" href="https://kevinwh0.github.io/kevinwho/Logo.jpg" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet'>
+
+<style>
+	/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 10 10 1px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lightgrey; 
+  border-radius: 10px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+  box-shadow: -15px 10px #888888;
+  
+}
+	
+*{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+background-color: lightgrey; 
+    font-family: 'Exo', sans-serif;
+}
+.context {
+    width: 100%;
+    position: absolute;
+    top:100%;
+    
+}
+.area{
+    background: #494949;  
+    background: -webkit-linear-gradient(to left, #494949,#494949);  
+    width: 100%;
+    height:100vh;
+    
+   
+}
+.circles{
+    position: absolute;
+    top: 93%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.circles li{
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+    
+}
+.circles li:nth-child(1){
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+.circles li:nth-child(2){
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+.circles li:nth-child(3){
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+.circles li:nth-child(4){
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+.circles li:nth-child(5){
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+.circles li:nth-child(6){
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+.circles li:nth-child(7){
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+.circles li:nth-child(8){
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+.circles li:nth-child(9){
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+.circles li:nth-child(10){
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+@keyframes animate {
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+    100%{
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+}
+  p.Text {
+  
+    font-family: Space;
+	color: white;
+  
+  }
+	
+  .fa-youtube {
+  background: #bb0000;
+  color: white;
+}
+  ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+li {
+  float: left;
+}
+li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+li a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+li.dropdown {
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+.dropdown-content a:hover {background-color: #f1f1f1}
+  
+  
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+  .Logo{
+  border-radius: 50%;
+}
+  
+p    {color: grey;}
+  
+.danger {
+    position: absolute;
+    top: 200px;
+    left: 0px;
+  background-color: #ffdddd;
+  border-left: 6px solid #f44336;
+}
+@font-face {
+  font-family: Space;
+  src: url(sansation_light.woff);
+}
+h1 {
+  letter-spacing: 10px;
+  text-decoration: underline;
+  color: white;
+  text-shadow: 3px 2px grey;
+  text-transform: uppercase;
+  font-family: Space;
+}
+	
+	
+.banner {
+  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
+  filter: blur(5px);
+  position: relative;
+  top: 10px;
+  left: 0px;
+}
+.centered {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+}
+.centeredU {
+  font-family: 'Orbitron';font-size: 22px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-decoration: overline;
+  font-size: 20px;
+}
+.container {
+  font-family: 'Orbitron';font-size: 22px;
+  position: relative;
+  text-align: center;
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 45px;
+  top: -10px;
+  left: -10px;
+  text-shadow: 3px 3px #808080;
+}
+.Logo {
+  position: absolute;
+  top: 15px;
+  left: 16px;
+  border-radius: 50%;
+}
+.collapsible {
+  position: absolute;
+  top: 25px;
+  left: 120px;
+  cursor: pointer;
+  width: 0%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+.content {
+    position: absolute;
+  top: 25px;
+  left: 100px;
+  
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  font-size: 14px;
+  text-shadow: 1px 1px #808080;
+}
+.triangle-right {
+	width: 0;
+	height: 0;
+	border-top: 12.5px solid transparent;
+	border-left: 25px solid #555;
+	border-bottom: 12.5px solid transparent;
+}
+.Text {
+  position: absolute;
+  top: 100%;
+  left: 100px;
+  
+}
+.HeadBar {
+    font-family: 'Orbitron';font-size: 12px;
+}
+</style>
+  
+</head>
+<body>
+
+
+
+ 	<!-- LINKS At TOP OF PAGE -->
+	<ul class = "HeadBar">
+  <li><a href="">Home</a></li>
+  <li><a href="https://kevinwh0.github.io/kevinwho/vids.html">Video's</a></li>
+  <li><a href="https://kevinwh0.github.io/kevinwho/Projects.html">Projects/Files</a></li>
+</ul> 
+
+
+<h2>Orbetory:</h2>
+<p>Pre-Alpha has been released, so give your feedback in the comments, and we may add what you want, and fix some broken bugs.<br/> **NOTE:If you enter the game and It is Weird and red, press ALT. This will disable debug mode** <br/>
+<b>I don't have a linux so your the testers</b>
+<br/>
+Stay up to date for bug fixes, and updates
+
+<br/>
+
+<b>INSTRUCTIONS[IMPORTANT]</b><br/>
+since once its installed it can be confusing since its not like a normal app, since I don't know how to do that, open the "application.windows64" folder, and open the "Orbetory.exe" file, then you should be good, you can also do the sameish thing to install it for linux, just get the correct download 
+<br/><b>What You Need:</b><br/>
+JAVA<br/>
+32+ bit computer<br/>
+</p>
+  
+    <h3>Windows Downloads:</h3>
+<a href = "https://kevinwh0.github.io/Orbetory-Dev-Board/Orbetory%20V%200.0.1%5BWindows%5D%5B32Bit%5D.zip" download style="text-decoration:none" class="btn" style="width:100%"><i class="fa fa-download"></i>32 Bit Windows</a>
+<a href = "https://kevinwh0.github.io/Orbetory-Dev-Board/Orbetory%20V%200.0.1%5BWindows%5D%5B64Bit%5D.zip" download style="text-decoration:none" class="btn" style="width:100%"><i class="fa fa-download"></i>64 Bit Windows</a>
+
+  <h3>Linux Downloads:</h3>
+<a href = "https://kevinwh0.github.io/Orbetory-Dev-Board/Orbetory%20V%200.0.1%5BLinux%20%5D%5B32Bit%5D.zip" download style="text-decoration:none" class="btn" style="width:100%"><i class="fa fa-download"></i>32 Bit Linux</a>
+<a href = "https://kevinwh0.github.io/Orbetory-Dev-Board/Orbetory%20V%200.0.1%5BLinux%20%5D%5B64Bit%5D.zip" download style="text-decoration:none" class="btn" style="width:100%"><i class="fa fa-download"></i>64 Bit Linux</a>
+
+
+
+
+</body>
+</html>
