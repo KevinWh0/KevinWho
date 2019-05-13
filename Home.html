@@ -313,10 +313,23 @@ height:500px;
 width:100%;
 
 }
+.MineC{
+  background-color: #333333;
+  border: none;
+  color: grey;
+  padding: 0px 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+}
 </style>
   
 </head>
-<body>
+<body onload="myFunction()">
 
 
 
@@ -417,6 +430,21 @@ https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=the.real.k.who@gmail.com&fs=1
 <br>
 <br>
 <br>
+<h3>What I do:</h3>
+
+<button type="button" class = "MineC" onclick="myFunction()">Minecraft</button>
+
+
+<div id="MC1">
+<iframe src="https://classic.minecraft.net/" class="MC">
+  <p>Your browser does not support iframes.</p>
+</iframe>
+</div>
+
+<p>Roblox</p>
+<p>Subnautica</p>
+
+<br>
 
 <a href="https://minecraftservers.org/server/516186" target="_blank"><img src="https://status.minecraftservers.org/classic/516186.png" alt="The Survival Server Minecraft server" width="540" height="90" /></a>
  
@@ -439,32 +467,16 @@ for (i = 0; i < coll.length; i++) {
     }
   });
 }
-// Set the date we're counting down to
-var countDownDate = new Date("May 1, 2019 15:00:00").getTime();
-// Update the count down every 1 second
-var x = setInterval(function() {
-  // Get todays date and time
-  var now = new Date().getTime();
-    
-  // Find the distance between now and the count down date
-  var distance = countDownDate - now;
-    
-  // Time calculations for days, hours, minutes and seconds
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-  // Output the result in an element with id="demo"
-  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-  + minutes + "m " + seconds + "s "+ " Left until my next big release";
-    
-  // If the count down is over, write some text 
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("demo").innerHTML = "It seems its taking longer than expected oops. ):";
+
+
+function myFunction() {
+  var x = document.getElementById("MC1");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
   }
-}, 1000);
+}
 </script>
 </body>
 </html>
