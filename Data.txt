@@ -1,0 +1,3086 @@
+
+import processing.sound.*;
+
+/*
+TODO:
+ 
+ Fix Base building buttons
+ 
+ 
+ 
+ Tree Reproduction  (acorns or somthing)
+ Farming
+ Bodium 
+ 
+ */
+
+String V = "0.1.3 \n Pre-Alpha \n Build : 12s19"; // (date day year)
+String VLook = "0.1.3";
+
+//settings 
+int invSize = 3;
+int ScreenAdjust = 10;
+int UIDivisor = 20;
+
+boolean DebugMode = false;
+boolean AntiLag = false;
+boolean FirstBoot = true;
+boolean Muted = true;
+
+
+boolean MousePressed = false;
+//load pic's
+PImage Stars;
+PImage Metal;
+PImage Dirt;
+PImage ScrapMetal;
+PImage Magnet;
+PImage KevinWho;
+PImage Build;
+PImage Destroy;
+PImage PlanetsIcon;
+PImage Astro;
+
+
+//planet GUIS
+PImage Planet1;
+PImage IcePlanet;
+PImage Star;
+PImage ShootingStar;
+
+
+PImage Walk;
+PImage Wall;
+PImage Wall2;
+PImage Corner1;
+PImage Corner2;
+PImage Corner3;
+PImage Corner4;
+PImage Glass;
+PImage WoodTop;
+
+
+PImage ControlStation;
+PImage Plant;
+PImage Wood;
+PImage Seed;
+
+PImage WallBackground1;
+
+//space stuff
+PImage SpaceColor;
+
+
+PImage PlayerWalkForward1;
+PImage PlayerWalkForward2;
+
+PImage IdlePlayer;
+PImage Rocket;
+PImage RocketTakeOff;
+
+PImage AlienTech;
+
+
+
+PImage Heart;
+PImage H2O;
+
+PImage Unknown;
+
+
+//Energy
+PImage GoldWire;
+PImage GoldWireActive;
+PImage Battery;
+
+PImage LeverOn;
+PImage LeverOff;
+
+
+
+
+//particles
+PImage SmokePart;
+
+//items
+PImage SteelAxe;
+PImage SteelPic;
+PImage SteelShovel;
+PImage LightningRod;
+
+PImage Sap;
+PImage Bottle;
+PImage Syrup;
+PImage SpringWater;
+PImage Steel;
+PImage Sand;
+PImage Gold;
+
+
+//posters
+PImage Poster2;
+
+//fonts/sounds
+
+PFont MainFont;
+PFont Glitch;
+PFont Alean;
+PFont Normal;
+PFont Plain;
+PFont ArialMT48;
+SoundFile BlastOff;
+SoundFile ComputerBeeps;
+SoundFile BackgroundAmbient;
+
+
+
+Npc Npc = new Npc();
+Npc Npc2 = new Npc();
+
+Smoke Smoke = new Smoke();
+
+boolean Building = false;
+int PressTimerThing = 0;
+boolean FirstPresstime = false;
+//meator
+int MX = 0;
+int MY = 0;
+boolean MShown = true;
+boolean Mreset = false;
+int MresetTic;
+// other vars
+int InventoryCounter;
+//Player
+int GoToX;
+int GoToY;
+//up down right left
+boolean[] WalkDir = {false, false, false, false};
+int AnimationTic = second();
+int AnimationNum = 0;
+
+int PlayerX = 10;
+int PlayerY = 10;
+int PlayerSpeed = 3;
+Float MaxHealth = 20.0;
+Float MaxAir = 6.3;
+Float Air = 0.0;
+Float PlayerHealth = 0.0;
+Float Food = 126.0;
+Float MaxFood = 126.0;
+Float Water = 126.0;
+Float MaxWater = 126.0;
+boolean PlayerHidden = false;
+boolean Crafting = false;
+
+String PlanetBuild = "";
+Boolean EOpened = false;
+String PMode = "Move";
+String BuildMaterial = "Metal";
+int[] HeartRate = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110};
+int HeartTic = 0;
+
+String[] Equiped = {"", "", "", ""};
+boolean Hurt = false;
+boolean OnGround = false;
+boolean InGround = false;
+
+int CraftSelected = 0;
+String CraftDec = "";
+//map
+boolean BuildNow = false;
+int Size = 20;
+boolean MapUpdated = false;
+String Name = "";
+String CompanyName ="TerraCorp";
+String[] Story = {"You work for " + CompanyName + " (A space Company), You are working on the space station fixing ships \n (press any key to continue)", "The space Station catches on fire, and you use the nearest escape ship \n (press any key to continue)", "Somthing on your ship malfunctioned, and all connection to the outside world was lost \n (press any key to continue)", "You are stuck in a uncharted part of Space, your mission is to survive, and learn about nearby planets. \n (press any key to continue)", "Good Luck *Static*"};
+
+String[][]MapUpdate ={
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}};
+
+String[][]MapTextures ={
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}, 
+  {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""}};  
+
+
+
+int Shortest = 0;
+
+
+String[][] Map = {  
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", ""}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", ""}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "F", "F", "F", "F", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "F", "F", "F", "F", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "F", "CS", "F", "F", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "F", "F", "F", "F", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "G", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {"S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}  };
+
+String[][] Tree = {{"P", "P", "P"}, 
+  {"P", "P", "P"}, 
+  {" ", "L", " "}, 
+  {" ", "L", " "}
+};  
+boolean FallingTime = false;
+
+
+
+int RocketY = height;
+boolean Trvl = false;
+
+int[] PGrav = {1, 1, 1, 1};
+float time = 0;
+float darkFader = 1;
+int[] PlanetXScroller = {width, 0, 0};
+int PlanetX[] = {40, 0, 0, 0};
+String GOTO = "";
+String[][] planet1 = {  
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "A", "A", "A", "A", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "A", "E", "E", "A", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "P", "P", "P", " ", " ", " ", " ", "A", "E", "E", "A", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "P", "P", "P", " ", " ", " ", " ", "A", "E", "E", "A", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", "P", "P", "P", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "L", " ", " ", " ", " ", "D", "D", "D", "D", "D", "D", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", "P", "P", "P", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "L", " ", " ", " ", "D", "D", "D", "D", "D", "D", "D", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", "L", " ", "W", " ", " ", " ", " ", " ", " ", " ", "S", " ", " ", " ", " ", " ", "L", " ", " ", "D", "D", "D", "D", "D", "D", "D", "D", "D", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", "L", " ", "D", "D", "D", " ", "R", ".", ".", "S", "S", "S", "w", "w", "w", "w", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {"S", "S", "D", "S", "D", "s", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D"}, 
+  {"D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D"}, 
+  {"D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D"}, };
+
+String[][] planet1Tags = {  
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}};
+
+
+String[][] Room = {  
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, 
+  {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "}, };
+
+int Selected = 0;
+int InvSize = 30;
+String[] Inventory = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
+String[] OldInv = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
+
+
+//0-29
+String HasItems = "waiting";
+
+String Page = "Loading";
+//saving
+String Save = "";
+String[] list = split(Save, ' ');
+//other
+float[] FinalTime = {0, 0, 0, 0, 0, 0};
+float[] Time = {0, 0, 0, 0, 0, 0};
+boolean TimeSet = false;
+boolean TimeUp = false;
+
+boolean TimeSet1 = false;
+boolean TimeUp1 = false;
+boolean TimeSet3 = false;
+boolean TimeUp3 = false;
+
+boolean Mouse = false;
+String[] PlanetsText = {"K3fv \n Air : True \n Status: UNKNOWN", "Generic_Ice_Planet \n Air: n/a \n Gravity: n/a", "", ""};
+String OnPlanet = "SpaceBase";
+float OnPlanetPlayerX = width/2;
+float OnPlanetPlayerY = height/2;
+float airTime = 200;
+float FallSpeed = PGrav[0];
+float FlyHeight = 0;
+float DeathFade = 0;
+boolean TakingOff = false;
+
+String RandomThings[] = {"Refilling O2", "Killing Bugs", "ZZZzzz", "", ""};
+String DeathComments[] = {"Spawning...", "You tried", "You Cant Blame Me!", "Be More Carefull", "How about next time you try not to die?", "Give Up?", "Concentrate!", "Dont Rage", "Its not the end of the world.", "Ouch", "Sorry for your loss.", "Its only a game.", "):", "Ouch, That must hurt", "I grant you one more life!", "You Beat Me", "You Should Watch Out For That!", "Dont Blame the bugs", "What do you mean it was not your fault?"};
+int DeathNum = -1;
+boolean Deathloop1 = true;
+int TextCounter = 0;
+String Says = "";
+boolean showingText = false;
+String[] Log = {"", "", "", "", "", "", "", "", "", ""};
+String LastLog = "";
+float TitleRot  = 0.0;
+float HoldTime = 0;
+String ToolType = "";
+boolean AlreadyAdded1 = false;
+float Rot = 0;
+float RevRot = 1000;
+
+Boolean Striking = false;
+
+//OBJ's
+//BackgroundOBJ[] VoidStuff;
+int unit = 40;
+int count;
+BackgroundOBJ[] mods;
+
+Item[] Items;
+int index = 0;
+
+public String DroppedItem = "";
+public int DroppeditemX = -1;
+public int DroppeditemY = -1;
+public String DropLocation = "";
+//drop item
+//menu
+String MOPT = CompanyName + " needs you";
+float TickleTextX, TickleTextY; // X and Y coordinates of text
+float hr, vr;  // horizontal and vertical radius of the text
+
+
+
+
+//Look for updates
+String url;
+String[] lines;
+// Get rid of the array in order to search the whole page
+String html;
+
+int Length;
+int looper; 
+String UpToDate;
+int back;
+int i;
+
+
+
+void setup() {
+
+  Poster2 = loadImage("Poster2.png");
+  image(Poster2, 0, 0, width, height);
+  
+  
+  try{
+   url = "https://kevinwh0.github.io/Orbetory-Dev-Board/Update.txt";
+  lines = loadStrings(url);
+  // Get rid of the array in order to search the whole page
+   html = join(lines, " ");
+  
+   Length = html.length();
+   looper = 0; 
+   UpToDate = "";
+   back = 2;
+   i = 2;
+   
+   
+    int loc = html.indexOf(VLook);
+    //if(!html.equals(V)){\
+    if(loc != -1){
+      print("Up To Date ");
+      UpToDate =  "Up To Date";
+    }else{
+     print("UPDATE");
+     UpToDate = "UPDATE V:" + html + " AVALIBLE";
+    }
+   
+   
+  }catch(Exception e){
+    print(e);
+    UpToDate = "Error: "+e;
+    UpToDate = "can't look for update, is your wifi on?              Error Code: " + e;
+  }
+  
+
+  //menu
+  textAlign(CENTER, CENTER);
+
+  hr = textWidth(MOPT) / 2;
+  vr = (textAscent() + textDescent()) / 2;
+  noStroke();
+  TickleTextX = width / 2;
+  TickleTextY = height / 2;
+
+  //stars
+  Stars = loadImage("Stars.bmp");
+  Metal = loadImage("Metal.JPG");
+  Dirt = loadImage("Dirt.bmp");
+  ScrapMetal = loadImage("ScrapMetal.png");
+  Magnet = loadImage("Magnet.png");
+  KevinWho = loadImage("KevinWho.jpg");
+  Build = loadImage("BuildToolIcon.png");
+  Destroy = loadImage("Destroy.bmp");
+  PlanetsIcon = loadImage("PlanetsGUI.jpg");
+
+  //PLANET GUIS
+  Planet1 = loadImage("Planet1.png");
+  IcePlanet = loadImage("IcePlanet.png");
+
+
+  Star = loadImage("Star.png");
+  ShootingStar = loadImage("ShootingStar.png");
+
+  Walk = loadImage("Walk.png");
+  Wall = loadImage("Wall.jpg");
+  Wall2 = loadImage("Wall2.jpg");
+  Corner1 = loadImage("WallCorner.png");
+  Corner2 = loadImage("WallCorner1.png");
+  Corner3 = loadImage("WallCorner2.png");
+  Corner4 = loadImage("WallCorner3.png");
+  Glass = loadImage("Glass.png");
+  WoodTop = loadImage("WoodTop.png");
+
+  Plant = loadImage("Plants.png");
+  Wood = loadImage("Wood.png");
+  Seed = loadImage("seeds.png");
+
+  WallBackground1 = loadImage("WallBackground1.png");
+
+  ControlStation = loadImage("Computer.png");
+
+  Rocket = loadImage("MiniShip.png");
+  RocketTakeOff = loadImage("MiniShipOn.png");
+
+  AlienTech = loadImage("Tech.png");
+
+  IdlePlayer = loadImage("PlayerIdle.bmp");
+
+  PlayerWalkForward1 = loadImage("PlayerWalkForward.png");
+  PlayerWalkForward2 = loadImage("PlayerWalkForward2.png");
+  Astro = loadImage("TitleAstro.png");
+  //space stuff
+  SpaceColor = loadImage("SpaceStuff.png");
+
+
+  Heart = loadImage("heart.bmp");
+  H2O = loadImage("Water.png");
+
+
+  Unknown = loadImage("Unkown.bmp");
+  //particles
+  SmokePart = loadImage("Smoke.png");
+
+
+
+  //energy
+  GoldWire = loadImage("GoldWire.png");
+  GoldWireActive = loadImage("GoldWireActive.png");
+  Battery = loadImage("Battery.png");
+  LeverOn = loadImage("LeverOn.png");
+  LeverOff = loadImage("LeverOff.png");
+
+  //items
+  SteelAxe = loadImage("SteelAxe.png");
+  SteelPic = loadImage("Steel-Pic.png");
+  SteelShovel = loadImage("Shovel.png");
+  LightningRod = loadImage("Lightning-Rod.png");
+
+  Sap = loadImage("Sap.png");
+  Syrup = loadImage("syrup.png");
+  Bottle = loadImage("bottle.png");
+  SpringWater = loadImage("JarWater.png");
+  Steel = loadImage("Steel.png");
+  Sand = loadImage("Sand.png");
+  Gold = loadImage("Gold.png");
+
+
+  //sounds/fonts
+  MainFont = loadFont("ARDESTINE-200.vlw");
+  Glitch = loadFont("DoctorGlitch-48.vlw");
+  Alean = loadFont("HappyKiller-48.vlw");
+
+  Normal = loadFont("CourierNewPSMT-48.vlw");
+  Plain = loadFont("GentiumBasic-48.vlw");
+
+  ArialMT48 = loadFont("ArialMT-48.vlw");
+
+  BlastOff = new SoundFile(this, "BlastOff.mp3");
+  ComputerBeeps = new SoundFile(this, "ComputerBeeps.wav");
+  BackgroundAmbient = new SoundFile(this, "RocketBackgroundNoise.mp3");
+  //save
+  String[] Load = loadStrings("Save.txt");
+  //print("This is load |"+Load[1] +"|\n");
+  fullScreen();
+  frameRate(220);
+  //int loader = 0;
+  //String loads = "";
+  print("Loaded :");
+  for (int i = 0; i < Load.length; i++) {
+    print("\"" + Load[i]+"\"" + i+"/"+Load.length);
+    Inventory[i] = Load[i];
+    //print();
+    /*if (i < Inventory.length && Load[i] != "") {
+     for(int s = 0; s < Load[i].length()-1; s++){
+     loads = loads + Load[i].charAt(s);
+     //Inventory[i] = Load[i];
+     if(s == Load[i].length()-2){
+     Inventory[i] = loads;
+     loads = "";
+     
+     }
+     }
+     
+     }*/
+  }
+  if (width>height) {
+    Shortest = height;
+  } else {
+    Shortest = width;
+  }
+  OnPlanetPlayerX = width/2;
+
+
+
+  int wideCount = width / unit;
+  int highCount = height / unit;
+  count = wideCount * highCount;
+  mods = new BackgroundOBJ[count];
+  Items = new Item[40];
+
+  for (int y = 0; y < highCount; y++) {
+    for (int x = 0; x < wideCount; x++) {
+      mods[index++] = new BackgroundOBJ();
+      if (index < 40) {
+        Items[index] = new Item();
+      }
+    }
+  }
+  index = 0;
+}
+
+
+
+
+//functions
+
+void Text(String Text) {
+  showingText = true;
+
+  Says = Says + Text.charAt(TextCounter);
+  TextCounter++;
+  if (TextCounter == Text.length()) {
+    TextCounter = 0;
+    Says = "";
+    //return;
+  }
+}
+
+
+void Update(boolean save) {
+  if (save) {
+    //if(!Inventory.equals(OldInv)){
+    AddToLog("Saving");
+    if (!Inventory[0].isEmpty()) Save = Inventory[0];
+
+    for (int s = 1; s<30; s++) {
+      if (!Inventory[s].isEmpty())
+      {
+        Save = Save + ' ' +Inventory[s];
+        //OldInv[s] = Inventory[s];
+      }
+    }
+    list = split(Save, ' ');
+    saveStrings("Save.txt", list);
+    Save = "";
+
+    //}
+  }
+  if (MapUpdate != Map) {
+    for (int i = 0; i<20; i++) {
+      for (int j = 0; j<20; j++) {
+        MapUpdated = false;
+        MapUpdate[i][j] = Map[i][j];
+      }
+    }
+  } else { 
+    MapUpdated = true;
+  }
+}
+
+void Menu(Boolean enabled) {
+  if (enabled == true) {
+    textAlign(CENTER, CENTER);
+
+    // If the cursor is over the text, change the position
+    if (abs(mouseX -TickleTextX) < hr &&
+      abs(mouseY -TickleTextY) < vr) {
+      TickleTextX += random(-5, 5);
+      TickleTextY += random(-5, 5);
+    }
+    fill(255);
+    text(MOPT, TickleTextX, TickleTextY);
+    textAlign(UP, LEFT);
+
+
+
+    image(IcePlanet, -300+((Planet1.width/4)*3), height-((Planet1.height/4)*3));
+    pushMatrix();
+    translate(width/3-millis()/20, width/4-millis()/20);
+    rotate(-0.9);
+    image(RocketTakeOff, width/3-millis()/20, width/4-millis()/20);
+    popMatrix(); 
+
+    pushMatrix();
+    translate(width/3 + Shortest/4, width/4 + Shortest/4);
+    rotate(-TitleRot);
+    TitleRot += random(-0.01, 0.01);
+    image(IdlePlayer, 0, 0, Shortest/8, Shortest/8);
+
+    popMatrix();        
+    stroke(255);
+    line((width/3 + Shortest/4) + 50, (width/4 + Shortest/4) + 50, 100, height-20);      
+
+    for (int i = 0; i<10; i++) {
+      if (i == 9) {
+        fill(255, 243, 0);
+      } else {
+        fill(255, 255, 255, i*3);
+      }
+      textSize(height/5); 
+      textFont(MainFont, height/6);
+
+      text("Orbetory", width/4-i, height/6-i*6);
+    }
+
+
+
+    //rotate(-1);
+    textFont(Glitch, height/6);
+    textSize(60);
+    //text("Play",10,height/1.5);
+
+
+    Button(width/2-50, round(height/1.5)+25, 50, 50, "Play", "Play", 60);
+    image(KevinWho, width-KevinWho.width, height-KevinWho.height);
+    if (mouseX>width-KevinWho.width && mouseY>KevinWho.height&&mousePressed) {
+      link("https://www.youtube.com/channel/UCcF2MRWI9ZhOfA9KV4v2YiA");
+    }
+    textFont(Normal, 15);
+  } else {
+    Page = "Play";
+  }
+}
+
+void Craft(String item1, String item2, String craft) {
+  //print(" item1 " + item1 +" item2 " + item2);
+  int itemCount = 0;
+
+  for (int i = 0; i<30 && itemCount < 2; i++) {
+
+    if (Inventory[i].equals(item1) && itemCount == 0) {
+      itemCount++;
+      i = 0;
+    } else if (Inventory[i].equals(item2) && itemCount == 1) {
+      itemCount++;
+    }
+    if (itemCount>1) {
+      DelItem(item1); 
+      DelItem(item2);
+      Giveitem(craft);
+    }
+  }
+}
+void ReplaceItem(String item1, String Give1, Boolean All) {
+  //print(" item1 " + item1 +" item2 " + item2);
+  for (int i = 0; i<30; i++) {
+
+    if (Inventory[i].equals(item1)) {
+      DelItem(item1); 
+      Giveitem(Give1);
+      if (All == false) {
+        break;
+      }
+    }
+  }
+}
+void Button(int X, int Y, int Width, int Height, String Txt, String page, int size) {
+  //if (Mode=="Center") {
+  textSize(size);
+  int Maxi = 5;
+  if (mouseY>Y-size&&mouseY<Y+Height+size/8-20&&mouseX>X&&mouseX<X+Width+size+50) {
+    Maxi = 2;
+  } else {
+    Maxi = 5;
+  }
+  for (int i = 0; i<Maxi; i++) {
+
+    if (i == Maxi-1) {
+      fill(100, 100, 100);
+    } else {
+      fill(255);
+    }
+    text(Txt, X+i, Y+i);
+  }
+  //rect(X, Y, Width, Height, 5);
+  //fill(255);
+  //rect(X, Y, Width, Height);
+  //fill(255);
+
+  if (mousePressed == true&&mouseY>Y-size&&mouseY<Y+Height+size/8-20&&mouseX>X&&mouseX<X+Width+size+50) {
+    //delay(120);
+    Page = page;
+  }
+  //}
+  textSize(10);
+}
+void DelItem(String item) {
+
+  for (int i = 0; i<30; i++) {
+    //
+    if (item.equals(Inventory[i])) {
+      //if (Inventory[i] == item) {
+      //print(" i:"+i+" ");
+      Inventory[i] = "";
+      print(" Deleted:"+item+" in Slot:"+i);
+      print("\n");
+
+      break;
+    }
+  }
+}
+void AddToLog(String Logger) {
+
+  if (Logger != LastLog) {
+    Log[0] = Logger;
+
+    Log[9] = Log[8];
+    Log[8] = Log[7];
+    Log[7] = Log[6];
+    Log[6] = Log[5];
+    Log[5] = Log[4];
+    Log[4] = Log[3];
+    Log[3] = Log[2];
+    Log[2] = Log[1];
+    Log[1] = Log[0];
+
+
+
+
+    LastLog = Logger;
+  }
+}
+boolean IsItemInList(String item) {
+  for (int i = 0; i<30; i++) {
+    //if (Inventory[i] == item) return true;
+    if (item.equals(Inventory[i])) return true;
+  }
+  return false;
+}
+
+
+
+
+void HasItem(String item, boolean del) {
+  HasItems = "waiting";
+  //print(" "+item+" ");
+  for (int i = 0; i<30; i++) {
+    //
+    if (Inventory[i] == item) {
+      HasItems = item;
+      //print(" i:"+i+" ");
+      print(" Item "+ item +" is present ");
+      print("\n");
+      /*if (del == true) {
+       Inventory[i] = "";
+       }*/
+      break;
+    }
+    HasItems = "false";
+  }
+}
+void Giveitem(String item) {
+  for (int i = 0; i<30; i++) {
+    if (Inventory[i].isEmpty()) {
+      Inventory[i] = item;
+      print(" Gave:"+Inventory[i]+" Slot : "+i);
+      print("\n");
+      break;
+    }
+    //InventoryCounter++;
+    //for(int s = 0; s<Inventory.length-2;){
+
+    //Save = Inventory[0]+" "+Inventory[1]+" "+Inventory[2]+" "+Inventory[3]+" "+Inventory[4]+" "+Inventory[5]+" "+Inventory[6]+" "+Inventory[7]+" "+Inventory[8]+" "+Inventory[9]+" "+Inventory[10]+" "+Inventory[11]+" "+Inventory[12]+" "+Inventory[13]+" "+Inventory[14]+" "+Inventory[15]+" "+Inventory[16]+" "+Inventory[17]+" "+Inventory[18]+" "+Inventory[19]+" "+Inventory[20]+" "+Inventory[21]+" "+Inventory[22]+" "+Inventory[23]+" "+Inventory[24]+" "+Inventory[25]+" "+Inventory[26]+" "+Inventory[27]+" "+Inventory[28]+" "+Inventory[29]+" ";
+    //}
+  }  
+  /*
+  if (!Inventory[0].isEmpty()) Save = Inventory[0];
+   
+   for (int s = 1; s<30; s++) {
+   if (!Inventory[s].isEmpty())
+   {
+   Save = Save + ' ' +Inventory[s];
+   }
+   }
+   print("Saving : "+ item+"\n");
+   //print(Save);
+   list = split(Save, ' ');
+   saveStrings("Save.txt", list);
+   Save = "";
+   */
+}
+
+
+void PulseWait(float MiliSecs) {
+  if (TimeSet == false) {
+    Time[0] = second();
+    TimeSet = true;
+    TimeUp = false;
+    FinalTime[0] = MiliSecs+millis();
+  }
+
+  if (millis() >= FinalTime[0]) {
+    TimeSet = false;
+    //print("HERE");
+    //time up
+    TimeUp = true;
+    return;
+  }
+  if (millis() % 2 == 0) {
+    Time[0]+=2;
+  }
+}
+void PressWait(float MiliSecs) {
+  if (TimeSet3 == false) {
+    Time[3] = second();
+    TimeSet3 = true;
+    TimeUp3 = false;
+    FinalTime[03] = MiliSecs+millis();
+  }
+
+  if (millis() >= FinalTime[3]) {
+    TimeSet3 = false;
+    //print("HERE");
+    //time up
+    TimeUp3 = true;
+    return;
+  }
+  if (millis() % 2 == 0) {
+    Time[3]+=2;
+  }
+}
+void AstroidWait(float MiliSecs) {
+  if (TimeSet1 == false) {
+    Time[1] = second();
+    TimeSet1 = true;
+    TimeUp1 = false;
+    FinalTime[1] = MiliSecs+millis();
+  }
+
+  if (millis() >= FinalTime[1]) {
+    TimeSet1 = false;
+    //print("HERE");
+    //time up
+    TimeUp1 = true;
+    return;
+  }
+  if (millis() % 2 == 0) {
+    Time[1]+=2;
+  }
+}
+void inventory() {
+
+
+
+  if (PMode.equals("Build") && Building == false && EOpened == false) {
+    fill(255, 255, 255, 150);
+    rect(0, height-200, width, 200);
+    if (mouseX>300 && mouseY>height-100 && mouseX<300+50 && mouseY<height-50) {
+      fill(255, 255, 255, 200);
+    }
+    image(Metal, 300, height-100, 50, 50);
+    if (BuildNow == true && mouseX>300 && mouseY>height-100 && mouseX<300+50 && mouseY<height-50) {
+      BuildMaterial = "Metal";
+      Building = true;
+    }
+
+
+    image(Glass, 360, height-100, 50, 50);
+    if (BuildNow == true && mouseX>360 && mouseY>height-100 && mouseX<360+50 && mouseY<height-50) {
+      BuildMaterial = "Glass";
+      Building = true;
+    }
+  }
+  if (keyPressed && key == 'o') Building = true;
+  else if (keyPressed && key == 'p') Building = false;
+
+
+
+
+
+  if (Hurt == false && PlayerHealth<MaxHealth) {
+    PlayerHealth+=0.05;
+    Water-=0.002;
+    Food-= 0.001;
+  }
+  //UI's
+  fill(200, 200, 200);
+  rect(26, height-95, 250, 70, 10);
+
+
+  PulseWait(100);
+  if (TimeUp) {
+    for (int j = 0; j < 9; j++) {
+      stroke(255, 0, 0);
+      //point((j)+100, (height-20)+random(100));
+      //HeartRate[j] = (round(random(100)));
+      if (PlayerHealth < 1) {
+        HeartRate[0] = 80;
+      } else if (Hurt == true) {
+        HeartTic++;
+        if (HeartTic > 0 && HeartTic < 40) {
+          HeartRate[0] = 50;
+        } else if (HeartTic > 80) {
+          HeartTic = 0;
+        } else {
+          HeartRate[0] = 100;
+        }
+      } else {
+        HeartRate[0] = round(random(20)+80);
+      }
+    }
+
+    HeartRate[9] = HeartRate[8];
+    HeartRate[8] = HeartRate[7];
+    HeartRate[7] = HeartRate[6];
+    HeartRate[6] = HeartRate[5];
+    HeartRate[5] = HeartRate[4];
+    HeartRate[4] = HeartRate[3];
+    HeartRate[3] = HeartRate[2];
+    HeartRate[2] = HeartRate[1];
+    HeartRate[1] = HeartRate[0];
+  }
+  for (int j = 1; j < 10; j++) {
+    stroke(255, 0, 0, j*100);
+
+    line((j*10)+100, (HeartRate[j+1])+(height-172), (j*10)+90, HeartRate[j]+(height-172));
+  }
+  /*
+  
+   for (int j = 0; j < 150; j = j+5) {
+   stroke(255, 0, 0,j);
+   line((j)+100, (height-20)+random(100),(j)+100,(height-20)+random(100));
+   }
+   Cool sound graph
+   */
+
+  stroke(0, 0, 0);
+
+  fill(157, 157, 157);
+  rect(120, height-50, MaxWater, 20, 10);
+  fill(100, 220, 220);
+  rect(120, height-50, Water, 20, 10);
+  fill(157, 157, 157);
+  rect(120, height-75, MaxFood, 20, 10);
+  fill(0, 255, 0);
+  rect(120, height-75, Food, 20, 10);
+  fill(0);
+  textSize(15);
+  text("Food "+ round(Food)+"/"+round(MaxFood), 130, height-62);
+  text("Water "+ round(Water)+"/"+round(MaxWater), 130, height-36);
+
+  if (second() % 2 == 0) {
+    Water-=0.006;
+    Food-= 0.004;
+  }
+
+  stroke(0, 0, 0);
+  fill(200, 200, 200);
+  ellipse(50, height-70, 100, 100);
+
+  noFill();
+  stroke(255, 0, 0);
+  strokeWeight(20);
+  arc(50, height-70, 80, 80, 0, PlayerHealth/3.1746031746, OPEN);
+  stroke(0, 0, 0);
+
+  // Wait(1);
+  if (second() % 2 == 0) {  
+    image(Heart, 30, height-90, 30, 30);
+  } else {
+    image(Heart, 30, height-90, 35, 35);
+  }
+  strokeWeight(3);
+  fill(200, 200, 200);
+  ellipse(80, height-30, 80, 80);
+
+  noFill();
+  stroke(0, 0, 255);  
+  strokeWeight(20);  
+  arc(80, height-30, 60, 60, 0, Air, OPEN);
+  stroke(0, 0, 0);
+
+  strokeWeight(1);
+
+
+  //inventory
+  int Isize = 30;
+  fill(255);
+  for (int i = 0; i<Isize; i++) {
+    noStroke();
+    if (mousePressed && EOpened != true && mouseY > (i*20)+10 && mouseY < (i*20)+30 && mouseX < 100 || Selected == i) {
+      fill(255, 0, 0);
+      rect( 0, ((i*20)+10), 100, 20);
+      Selected = i;
+    }
+    stroke(0);
+    fill(255);
+    textFont(Normal, 20);
+    text(i+": "+Inventory[i], 0, (i*20)+30);
+  }
+
+  /* if (PMode == "Move") {
+   image(Build, width-Build.width, 0);
+   if (Mouse == false && mouseX>width-Build.width && mouseY<Build.height) {
+   delay(20);
+   PMode = "Build";
+   }
+   } else {
+   image(Walk, width-Build.width, 0);
+   if (Mouse == false && mouseX>width-Build.width && mouseY<Build.height) {
+   delay(20);
+   PMode = "Move";
+   }
+   
+   }*/
+  image(Destroy, width-Destroy.width, 0);
+  if (mousePressed && mouseX>width-Destroy.width && mouseY<Destroy.height) {
+    PMode = "Destroy";
+  }
+
+  image(Build, width-Build.width, Destroy.height+10);
+  if (mousePressed && mouseX>width-Destroy.width && mouseY<(Build.height+Destroy.height+10) && mouseY>Destroy.height+10) {
+    PMode = "Build";
+    Building = false;
+  }
+
+
+  image(PlanetsIcon, width-100, 0, 50, 50);
+
+  if (mousePressed && mouseX > width-100 && mouseX < (width-100)+50 && mouseY < 50) {
+    PMode = "PlanetSel";
+  }
+
+
+
+  if (PMode.equals("PlanetSel")) {
+
+    fill(25, 25, 200, 200);
+    rect(0, 0, width, height);
+    //lines connecting planets
+    strokeWeight(10);
+    stroke(0);
+    line(70, height-50, 150, height-250);
+    strokeWeight(1);
+
+
+    //start planet
+    if (mouseX > 20 && mouseX < 120 && mouseY < height && mouseY > height-100) {
+      fill(255, 255, 255, 100);
+      rect(40, height-100, 400, 100, 20);
+      fill(0);
+      textFont(Plain, 14);
+      text(PlanetsText[0], 130, height-70);
+
+
+      stroke(24, 219, 217, 150);
+      noFill();
+      strokeWeight(5);
+      Rot+=0.01;
+
+      RevRot-=0.01;
+      arc(70, height-50, 150, 150, Rot, 2+Rot, OPEN);
+      arc(70, height-50, 130, 130, 3+Rot*1.5, 6+Rot*1.6, OPEN);
+      arc(70, height-50, 170, 170, Rot*2, 1+Rot*2, OPEN);
+      arc(70, height-50, 200, 200, (RevRot*3), (1+RevRot*3), OPEN);
+
+      strokeWeight(1);
+    }
+    if (RevRot < 1) {
+      RevRot = 1000;
+    }
+    //ice planet
+    if (mouseX > 105 && mouseX < 205 && mouseY < height-200 && mouseY > height-300) {
+      //hover
+      fill(255, 255, 255, 100);
+      rect(125, height-300, 400, 100, 20);
+      fill(0);
+      textFont(Plain, 14);
+      text(PlanetsText[1], 200, height-250);
+    }    
+    if (mousePressed && OnPlanet.equals("SpaceBase") && mouseX > 20 && mouseX < 120 && mouseY < height && mouseY > height-100) {
+      Trvl = true;
+      PMode = "Move";
+      RocketY = height;
+      FlyHeight = height-1;
+      TakingOff = true;
+      GOTO = "Planet1";
+    }
+
+
+    image(Planet1, 20, height-100, 100, 100);
+
+    image(IcePlanet, 100, height-300, 100, 100);
+  }
+  if (Trvl == true) {
+    OnPlanetPlayerX = width/2;
+    PlanetXScroller[0] = 40;
+
+    if (RocketY<0 || DebugMode) {
+      OnPlanet = GOTO;
+      if (FlyHeight > 1) {
+        FlyHeight -= 15;
+        AddToLog(""+FlyHeight);
+      } else {
+        PlayerHidden = false;
+        RocketY = height;
+        Trvl = false;
+        TakingOff = false;
+      }
+      if (DebugMode) {
+        PlayerHidden = false;
+        RocketY = height;
+        Trvl = false;
+        TakingOff = false;        
+        PlayerY = height;
+      }
+    } else {
+      RocketY -= 5;
+      image(RocketTakeOff, PlayerX-IdlePlayer.width/2, RocketY);
+      if (RocketY>PlayerY-6 && RocketY<PlayerY+6) {
+        //PlayerY = RocketY;
+        PlayerHidden = true;
+        Air = MaxAir;
+      }
+    }
+  }
+  if (keyPressed == true && FirstPresstime == false && PressTimerThing > 5) {
+    FirstPresstime = true;
+    PressTimerThing = 0;
+  } else {
+    FirstPresstime = false;
+    PressTimerThing ++;
+  }
+
+
+  if (key == 'i' && FirstPresstime == true) {
+    if (EOpened == false) {
+      EOpened = true;
+    } else {
+      EOpened = false;
+    }
+  }
+  //inventory
+
+
+
+  if (EOpened == true) {
+    fill(3, 219, 255, 150);
+    rect(0, 0, width, height, 10);
+    int glitchLines = 0;
+    stroke(3, 209, 255, random(100)+150);
+    for (int i = 0; i<height; i+=5) {
+      line(0, i, width, i);
+
+      if (random(10) > 9) {
+        line(0, i/2*glitchLines, width, i/2*glitchLines);
+        glitchLines++;
+      }
+    }
+
+    try {
+      int Invcounter = 0;
+      for (int i = 0; i<InvSize/invSize-2; i++) {
+        for (int j = 0; j<InvSize/invSize-2; j++) {
+
+
+
+          //fill(255);
+          if (Invcounter > InvSize-1) {
+          } else {
+
+
+
+
+
+            if (Invcounter == Selected) {
+              fill(255, 0, 0, 150);
+            } else if (mouseX > i*(Shortest/InvSize)*invSize && mouseY > (j*(Shortest/InvSize)*invSize)+20 && mouseX < (i*(Shortest/InvSize)*invSize) + Shortest/(InvSize/invSize) && mouseY < ((j*(Shortest/InvSize)*invSize)+20) + Shortest/(InvSize/invSize)) {
+              fill(200, 200, 200, 100);
+            } else {
+              fill(255, 255, 255, 100);
+              //fill(3, 159, 205, random(50));
+            }
+
+
+            stroke(0);
+            rect(i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));
+            noStroke();
+            if (mousePressed && mouseX > i*(Shortest/InvSize)*invSize && mouseY > (j*(Shortest/InvSize)*invSize)+20 && mouseX < (i*(Shortest/InvSize)*invSize) + Shortest/(InvSize/invSize) && mouseY < ((j*(Shortest/InvSize)*invSize)+20) + Shortest/(InvSize/invSize)) {
+              Selected = Invcounter;
+            }
+
+
+
+            //text(Invcounter, i*(Shortest/InvSize)*invSize,(j*(Shortest/InvSize)*invSize)+10);
+            //text(Inventory[Invcounter], i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+40);
+
+            fill(3, 159, 205, random(50));
+            rect(width/5*3, 0, width/4, height);
+            if (mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+              fill(0, 150, 0);
+            } else {
+              fill(0, 200, 0);
+            }
+
+            //USE button
+            rect(width/5*3+(width/6)/4, height-250, width/6, 100);
+
+
+            if (keyPressed|| mouseX > width/5*3+(width/6)/4 && mouseY > height-140 && mouseX < (width/5*3+(width/6)/4) + width/12 && mouseY < height-40) {
+              if (mousePressed || key == 'X' || key == 'x') {
+                Inventory[Selected] = "";
+                fill(200, 0, 0);
+              }
+            } else {
+              fill(240, 0, 0);
+            }
+            int trys = 0;
+            if (trys == 0 && keyPressed && key == 'Z' || key == 'z' && keyPressed && trys == 0) {
+              //drop item
+              //Inventory[Selected] = "";
+
+              trys = 1;
+              DroppedItem = Inventory[Selected];
+              DroppeditemX = 100;
+              DroppeditemY = 100;
+              //run last
+              //Items.ItemCreate();
+              for (Item Items : Items) {
+                Items.ItemCreate();
+              }
+            }
+            //Garbage button
+            //image(Destroy, width/5*3+(width/6)/4,height-140,width/12,100);
+            rect(width/5*3+(width/6)/4, height-140, width/12, 100);
+
+            textFont(Normal, 14);
+            textSize(40);
+            fill(0);
+            if (!Crafting) {
+              //title
+              text(Inventory[Selected], (width/5*3)+40, 100);
+            }
+            fill(255);
+            text("USE", (width/5*3+(width/6)/2)+20, height-210, width/6, 100);
+            textSize(100);
+            text("X", (width/5*3+(width/6)/4)+20, height-120, width/6, 100);
+            textSize(14);
+
+            //CRAFTING
+            if (mouseX > (width/5*3+(width/6)/4)+width/12 && mouseY > height-140 && mouseX < ((width/5*3+(width/6)/4)+width/12) + width/12 && mouseY < (height-140) + 100) {
+              if (mousePressed) {
+                Crafting = true;
+              }
+              fill(200);
+            } else {
+              fill(240);
+            }
+
+            rect((width/5*3+(width/6)/4)+width/12, height-140, width/12, 100);
+
+
+
+            switch(Inventory[Invcounter]) {
+            case "":
+              break;
+            case "Water": 
+              image(H2O, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));           
+              break;
+            case "Spring-Water":
+              image(SpringWater, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));           
+              break;
+            case "Metal":
+              image(ScrapMetal, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break;
+            case "Steel":
+              image(Steel, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break;
+            case "Sand": 
+              image(Sand, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));           
+              break;
+            case "Glass":
+              image(Glass, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break;
+            case "Leaf":
+              image(Plant, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break;
+            case "Wood":
+              image(Wood, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break; 
+            case "Seed":
+              image(Seed, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break; 
+            case "Sap":
+              image(Sap, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));                          
+              break;
+            case "Syrup":
+              image(Syrup, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));                          
+              break;
+            case "Bottle":
+              image(Bottle, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));                          
+              break;
+            case "Steel-Axe":
+              image(SteelAxe, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break; 
+            case "Steel-Pickaxe":
+              image(SteelPic, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break;  
+            case "Steel-Shovel":
+              image(SteelShovel, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break;
+            case "Lightning-Rod":
+              image(LightningRod, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break; 
+            case "Gold":
+              image(Gold, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break; 
+            case "Gold-Wire":
+              image(GoldWire, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break; 
+            case "Battery":
+              image(Battery, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+              break;
+            case "Lever": 
+              image(LeverOn, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));              
+            break;
+            default:
+              image(Unknown, i*(Shortest/InvSize)*invSize, (j*(Shortest/InvSize)*invSize)+20, Shortest/(InvSize/invSize), Shortest/(InvSize/invSize));
+              break;
+            }
+
+            String itemDec = "";
+
+            if(mousePressed){
+             HoldTime++; 
+            }
+
+            switch(Inventory[Selected]) {
+            case "":
+              itemDec = "Ummm thats just air";
+              break;
+            case "Water": 
+              itemDec = "The essectials, heres where its at, WATER! \n Restores 5 Thirst";
+              if (mousePressed && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                //Inventory[Selected] = "";
+                if (Water + 6 < MaxWater) {
+                  Inventory[Selected] = "";
+                  Water+=5;
+                }
+              }
+              break;
+            case "Spring-Water":
+              itemDec = "Fresh from the Springs, and rich with minerals! \n Restores 8 Thirst";
+              if (mousePressed && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                //Inventory[Selected] = "";
+                if (Water + 6 < MaxWater) {
+                  Inventory[Selected] = "";
+                  Water+=8;
+                }
+              }            
+              break;
+            case "Metal": 
+              itemDec = "Hmmm this seems good to craft with and build with \n \n \n *Warning CHOKING HAZARD \n Not for children under 3 years";
+              break;
+            case "Steel": 
+              itemDec = "This is harder and better for power tools";
+              break;
+            case "Sand":
+              itemDec = "You can make glass if heated, but how ?";
+              break;
+            case "Lightning-Rod":
+              itemDec = "Summon lighting \n \n \n can only be used on some planets";
+              //if (mousePressed && OnPlanet == "Planet1" && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+              PlanetBuild = "SummonLightning";
+              //EOpened = false;
+              //}
+              break;  
+            case "Glass":
+              itemDec = "Space-proof, dont question it";
+              break;
+            case "Leaf":
+              itemDec = "Leaf me alone I dont want to constently be writing descriptions, I know you want me to leave for this bad joke, but let me tell you what this is for... fine ill leaf ;)";
+              break;
+            case "Wood":
+              itemDec = "Its good ol timber, not airtight, but good for building on plants with atmosphere \n *May have splinters";
+              break;
+            case "Seed":
+              //if (mousePressed && OnPlanet == "Planet1" && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+              PlanetBuild = "Seed";
+              //EOpened = false;
+              //}
+              itemDec = "The pure essance of life, I wonder what you will grow, that is granted you have furtile soil \n \n \n can only be used on some planets";
+              break;  
+            case "Bottle":
+              itemDec = "Good for holding most liquids";
+              break;
+            case "Syrup":
+              if (mousePressed && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                PlayerHealth+=5;
+                MaxHealth +=5;
+                Inventory[Selected] = "Bottle";
+              }
+              itemDec = "Tasty \n +5 Health & Max Health";
+              break;               
+
+            case "Sap":
+              itemDec = "Sticky!";
+              break;
+            case "Steel-Axe":
+              itemDec = "Time to get chopping!";
+
+              break;
+            case "Steel-Pickaxe":
+              itemDec = "Mine stuff";
+              break;
+            case "Steel-Shovel":
+              itemDec = "Better for digging up sand";
+              break;
+            case "Gold":
+              itemDec = "Bling Blang shiny";
+              break;
+            case "Gold-Wire":
+              itemDec = "Can conduct energy well";
+              //if (mousePressed && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+              PlanetBuild = "Gold-Wire";
+              //}
+              break;
+            case "Battery":
+              itemDec = "The jail for the energy";
+              //if (mousePressed && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+              PlanetBuild = "Battery";
+              //}            
+
+              break;
+            case "Lever": 
+              itemDec = "Turn it on!";
+              PlanetBuild = "Lever";
+              break;            
+              default:
+              itemDec = "You try hard to tell what this is with no luck, and frankly it seems the dev can't decide either";
+              break;
+            }     
+
+            if (Crafting) {
+              fill(255);
+              if (i<3) {
+                if (Invcounter == CraftSelected) {
+
+                  fill(255, 0, 0);
+                } else if (mouseX > ((4+i)*(Shortest/InvSize)*invSize)+20 && mouseY > (j*(Shortest/InvSize)*invSize)+20 && mouseX < ((4+i)*(Shortest/InvSize)*invSize)+20 + Shortest/(InvSize/invSize) && mouseY < ((j*(Shortest/InvSize)*invSize)+20) + Shortest/(InvSize/invSize)) {
+                  fill(200);
+                  if (mousePressed) {
+                    CraftSelected = Invcounter;
+                  }
+                } else {
+                  fill(255);
+                }
+                rect(((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));
+
+
+                switch(CraftSelected) {
+                case 0:
+                  CraftDec = "THE X BUTTON";
+                  CraftSelected = 1;
+                  Crafting = false;
+                  break;
+                case 1:
+                  //image(SteelAxe ,((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));
+
+                  CraftDec = "Steel-Axe  \n Requires: \n Wood 1x \n Steel 1x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    //Giveitem("Metal");
+                    Craft("Wood", "Steel", "Steel-Axe");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }                    
+                  break;
+                case 2:
+                  CraftDec = "Steel-Pickaxe \n Requires: \n Wood 1x \n Steel 1x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    //Giveitem("Metal");
+                    Craft("Steel", "Wood", "Steel-Pickaxe");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }                         
+                  break;
+                case 3:
+                  CraftDec = "Steel-Shovel \n Requires: \n Wood 1x \n Steel 1x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    //Giveitem("Metal");
+                    Craft("Steel", "Wood", "Steel-Shovel");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }  
+                  break;
+
+                case 5:
+                  CraftDec = "Gold-Wire \n Requires: \n Gold 1x \n Steel 1x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    //Giveitem("Metal");
+                    Craft("Steel", "Gold", "Gold-Wire");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }  
+                  break;
+                case 6:
+                  CraftDec = "Battery \n Requires: \n Gold 1x \n Steel 1x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    //Giveitem("Metal");
+                    Craft("Steel", "Gold", "Battery");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }  
+                  break;
+                case 7:
+                  CraftDec = "Lever \n Requires: \n Metal 1x \n Wood 1x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    //Giveitem("Metal");
+                    Craft("Metal", "Wood", "Lever");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }  
+                  break;               
+                  case 10:
+                  //image(Metal ,((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));
+
+                  CraftDec = "Steel \n Requires: \n Metal 2x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    //Giveitem("Metal");
+                    Craft("Metal", "Metal", "Steel");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }                    
+                  break;
+
+                case 11:
+
+                  CraftDec = "Syrup \n Requires: \n Sap 1x \n Bottle 1x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    Craft("Bottle", "Sap", "Syrup");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  }                  
+                  break;
+                case 12:
+                  CraftDec = "Bottle \n Requires: \n Glass 2x \n Hold USE to craft";
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    Craft("Glass", "Glass", "Bottle");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  } 
+                  break;
+                case 13:
+
+                  CraftDec = "Spring Water \n Requires: \n Bottle 1x \n Being in water \n Hold USE to craft"; 
+                  break;
+                case 14:
+                  if (HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                    Craft("Steel", "Steel", "Lightning-Rod");
+                    HoldTime = 0;
+                    //Crafting = false;
+                  } 
+                  CraftDec ="Lightning-Rod \n Requires: \n Steel 2x \n Hold USE to craft \n \n \n can only be used on some planets \n 1x use";
+                  break;
+                default:
+                  CraftDec = "More Space for more crafting recipes!";
+                  break;
+                }
+
+
+                switch(Invcounter) {
+                case 0:
+                  fill(255, 0, 0);
+                  rect(((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));
+                  break;
+                case 1:
+                  image(SteelAxe, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));              
+                  break;
+                case 2:
+                  image(SteelPic, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));                             
+                  break;
+                case 3:
+                  image(SteelShovel, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));                             
+                  break;
+
+                case 5:
+                  image(GoldWire, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));                             
+                  break;
+                case 6:
+                  image(Battery, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));                             
+                  break;
+                case 7:
+                  image(LeverOn, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));                             
+                break;
+                case 10:
+                  image(Steel, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));              
+                  break;
+                case 11:
+                  image(Syrup, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));              
+                  break;
+                case 12:  
+                  image(Bottle, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));              
+                  break;
+                case 13:  
+                  image(SpringWater, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));              
+                  break;           
+                case 14:
+                  image(LightningRod, ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));              
+                  break;
+                default:
+
+                  break;
+                }
+              }
+            }
+
+
+            //item dec
+            fill(0);
+            textFont(Plain, 18);
+            if (Crafting) {
+              text(CraftDec, (width/5*3)+40, 200, width/5, 400);
+            } else {
+              text(itemDec, (width/5*3)+40, 200, width/5, 400);
+            }
+            if (Crafting && Invcounter == 0) {
+              fill(255);
+              textSize(40);
+              text("X", ((4+i)*(Shortest/InvSize)*invSize)+20, (j*(Shortest/InvSize)*invSize)+20, (Shortest/(InvSize/invSize)), Shortest/(InvSize/invSize));
+            }
+
+            textSize(14);
+          }
+
+          Invcounter++;
+        }
+      }
+    }
+    catch(Exception e) {
+      AddToLog("Skiped line");
+      AddToLog("ERROR: "+e);
+      UIDivisor++;
+    }
+
+    //Craft("Metal","Metal","Steel");
+  } else {
+    switch(Inventory[Selected]) {
+    case "Water": 
+      //Inventory[Selected] = "";
+      if (Water + 6 < MaxWater) {
+        Inventory[Selected] = "";
+        Water+=5;
+      }
+      break;
+    case "Spring-Water":
+      //Inventory[Selected] = "";
+      if (Water + 6 < MaxWater) {
+        Inventory[Selected] = "";
+        Water+=8;
+      }
+
+      PlanetBuild = "SummonLightning";
+
+    case "Seed":
+      PlanetBuild = "Seed";
+
+    case "Syrup":
+      PlayerHealth+=5;
+      MaxHealth +=5;
+      Inventory[Selected] = "Bottle";
+
+      break;               
+
+    case "Gold-Wire":
+      //if (mousePressed && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+      PlanetBuild = "Gold-Wire";
+      //}
+      break;
+    case "Battery":
+      //if (mousePressed && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+      PlanetBuild = "Battery";
+      //}            
+
+      break;
+     case "Lever":
+     
+     PlanetBuild = "Lever";
+     break;
+    default:
+      PlanetBuild = "NONE";
+      break;
+    }
+  }
+}
+
+void Player(int X, int Y) {
+  fill(255);
+  text(Inventory[Selected] + "\n" + PlanetBuild, mouseX, mouseY+40);
+  if (mousePressed && millis() % 2 == 0 && AlreadyAdded1 == false) {
+    AlreadyAdded1 = true;
+
+    if (Inventory[Selected].equals("Steel-Axe")) {
+      HoldTime+=5;
+      ToolType = "Axe";
+    } else if (Inventory[Selected].equals("Steel-Pickaxe")) {
+      ToolType = "Pickaxe";
+      HoldTime+=5;
+    } else if (Inventory[Selected].equals("Steel-Shovel")) {
+      ToolType = "Shovel";
+      HoldTime+=5;
+    } else {
+      HoldTime++;
+      ToolType = "Fist";
+    }
+  } else {
+    if (millis() % 2 != 0) {
+      AlreadyAdded1 = false;
+    }
+    if (mousePressed  == false) {
+      HoldTime = 0;
+    }
+  }
+
+
+
+
+
+  if (keyPressed) {
+    /* if (key == 'w' || key == 'W') {
+     PlayerY-=PlayerSpeed;
+     }
+     if (key == 'a' || key == 'A') {
+     PlayerX-=PlayerSpeed;
+     }
+     if (key == 's' || key == 'S') {
+     PlayerY+=PlayerSpeed;
+     }
+     if (key == 'd' || key == 'D') {
+     PlayerX+=PlayerSpeed;
+     }*/
+    if (keyPressed) {
+      if (OnPlanet == "SpaceBase") {
+        if (keyCode==UP || key == 'W' || key == 'w') {
+          PlayerY-=PlayerSpeed;
+          MapUpdated = false;
+        }
+        if (keyCode==LEFT || key == 'A' || key == 'a') {
+          PlayerX-=PlayerSpeed;
+          MapUpdated = false;
+        }
+        if (keyCode==DOWN || key == 'S' || key == 's') {
+          PlayerY+=PlayerSpeed;
+          MapUpdated = false;
+        }
+        if (keyCode==RIGHT || key == 'D' || key == 'd') {
+          PlayerX+=PlayerSpeed;
+          MapUpdated = false;
+        }
+      } else {
+        if (keyCode==UP || key == 'W' || key == 'w') {
+          //OnPlanetPlayerY-=PlayerSpeed;
+        }
+        if (keyCode==LEFT || key == 'A' || key == 'a') {
+          //OnPlanetPlayerX-=PlayerSpeed;
+          if (TakingOff == false) PlanetXScroller[0]+=PlayerSpeed;
+        }
+        if (keyCode==DOWN || key == 'S' || key == 's') {
+          OnPlanetPlayerY+=PlayerSpeed;
+        }
+        if (keyCode==RIGHT || key == 'D' || key == 'd') {
+          //OnPlanetPlayerX+=PlayerSpeed;
+          if (TakingOff == false) PlanetXScroller[0]-=PlayerSpeed;
+        }
+      }
+    }
+  }
+  if (OnPlanet == "Planet1") {
+
+    for (int i = 0; i < Size; i++) {
+      for (int j = 0; j < PlanetX[0]; j++) {
+        //gravity
+        if (planet1[i][j] == "D" || planet1[i][j] == "S") {
+          //gravity
+          if (keyPressed && airTime > 1) {
+            if (keyCode==UP|| key == 'W' || key == 'w') { // 
+              OnPlanetPlayerY--;
+              airTime--;    //rect(j*width/Size, i*height/Size, width/Size, height/Size);
+            }
+          }
+          if (OnPlanetPlayerX - PlanetXScroller[0] >= j*Shortest/Size && OnPlanetPlayerX - PlanetXScroller[0] <= j*Shortest/Size + Shortest/Size && OnPlanetPlayerY+30 >= i*Shortest/Size && OnPlanetPlayerY+30 <= i*Shortest/Size + Shortest/Size) {
+            OnGround = true;
+            //pushes him up
+          } else if ((OnPlanetPlayerX - PlanetXScroller[0] >= j*Shortest/Size && OnPlanetPlayerX - PlanetXScroller[0] <= j*Shortest/Size + Shortest/Size && OnPlanetPlayerY+30 >= i*Shortest/Size && OnPlanetPlayerY+30 <= i*Shortest/Size + Shortest/Size) == false && OnGround == false) {
+            OnGround = false; 
+            //pulls him to earth
+          }
+
+
+
+          /*else if(OnPlanetPlayerX>=j*width/Size && OnPlanetPlayerX <= j*width/Size+width/Size){
+           //else if (OnPlanetPlayerY+20>=i*height/Size && OnPlanetPlayerY<=(i+1)*height/Size) {
+           //else if ((OnPlanetPlayerY+30)>i*height/Size && (OnPlanetPlayerY+30)<(i+1)*height/Size) {
+           AddToLog("^"+OnPlanetPlayerY);
+           OnPlanetPlayerY-=0.5;
+           airTime = 200;
+           } else {
+           AddToLog("falling"+OnPlanetPlayerY);
+           OnPlanetPlayerY+=0.1;
+           }*/
+        }
+      }
+    }
+  }
+  if (OnGround == true) {
+    airTime = 200;
+    OnPlanetPlayerY-=FallSpeed;
+  } else {
+    OnPlanetPlayerY+=FallSpeed;
+    airTime -=50;
+  }
+  OnGround = false;
+  InGround = false;
+  //ellipse(X, Y, 20, 20);
+
+  /*PlayerWalkForward1
+   //up down right left
+   WalkDir[3] = false; LEFT
+   WalkDir[2] = false; RIGHT
+   WalkDir[1] = true; DOWN
+   WalkDir[0] = false; UP
+   */
+
+  if (WalkDir[0] == true) {
+    if (AnimationTic > 1) {
+
+      AnimationNum++;
+      if (second() % 2 == 0) {  
+        AnimationNum = 0;
+      } else {
+        AnimationNum = 1;
+      }
+    }
+
+
+    if (AnimationNum == 0) {
+      if (PlayerHidden == false) {
+        image(PlayerWalkForward1, X-50, Y-50, 100, 100);
+      }
+    } else {
+      if (PlayerHidden == false) {
+        image(PlayerWalkForward2, X-50, Y-50, 100, 100);
+      }
+    }
+  } else {
+    if (PlayerHidden == false) {
+      image(IdlePlayer, X-50, Y-50, 100, 100);
+    }
+  }
+
+  if (DebugMode == true) {
+    fill(0, 255, 0);
+    ellipse(OnPlanetPlayerX, OnPlanetPlayerY+30, 5, 5);
+    fill(255, 0, 0, 100);
+    ellipse(X, Y, 20, 20);
+    ellipse(X, Y+30, 20, 20);
+  }
+  //image(IdlePlayer,X-50,Y-50,100,100);
+  fill(255);
+  //text("Air:"+Air,20,height-20);
+  if (mousePressed) {
+    GoToX = mouseX;
+    GoToY = mouseY;
+  }
+  if (OnPlanet == "SpaceBase" && Air<0.1) {
+    PlayerHealth-=0.2;
+    Hurt = true;
+  } else {
+    Hurt = false;
+  }
+}
+
+void Map() {
+  //time (keep the time moving)
+  if (time < Shortest-100) {
+    //fill(255, 209, 41);
+    //ellipse(round(time), round(time), 80, 80);
+    time+=0.05;
+  } else {
+    //fill(200, 200, 200);
+    //ellipse(round(time)/ width, round(time)/ width, 80, 80);      
+    time+= width/10;
+  }
+
+  if (time > Shortest*Shortest) {
+    time = 0;
+  }
+
+
+  if (OnPlanet == "SpaceBase") {
+    for (int i = 0; i < Size; i++) {
+      for (int j = 0; j < Size; j++) {
+
+        if (mousePressed&& mouseX>j*Shortest/Size && mouseX<(j+1)*Shortest/Size && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+          //print(j+" "+i);
+          if (Building == true && Map[i][j] == "S") {
+            BuildNow = false;
+            ////HasItem("Metal", false);
+            //WIP
+
+            //print(HasItems); Metal
+            ////if (HasItems == "Metal" && PMode == "Build") {
+            if (IsItemInList("Metal") && PMode.equals("Build") && BuildMaterial.equals("Metal")) {
+
+              for (int ii = 0; ii<30; ii++) {
+                print("item[" + ii + "]: " +Inventory[ii] + " ");
+              }
+
+
+
+              print("found metal ");
+              AddToLog("Found Metal");
+              Map[i][j] = "F";
+              if (DebugMode == false) {
+                DelItem("Metal");
+              }
+              //HasItems = "waiting";
+            } else if (IsItemInList("Glass") && PMode.equals("Build") && BuildMaterial.equals("Glass")) {
+              Map[i][j] = "G";
+              if (DebugMode == false) {
+                DelItem("Glass");
+              }
+            } else {
+              print("no metal found"); 
+              AddToLog("No Metal");
+            }
+          } else if (PMode == "Destroy") {
+            if (Map[i][j] == "F") {
+              Giveitem("Metal");
+              Map[i][j] = "S";
+            } else if (Map[i][j] == "G") {
+              Giveitem("Glass");
+              Map[i][j] = "S";
+            }
+          } else if (PMode != "Destroy") {
+            if (Map[i][j] == "CS") {
+              if (!ComputerBeeps.isPlaying() && Muted == false) {
+                ComputerBeeps.play();
+              }
+              Text("HELLOOOOOO");//12345
+            }
+          }
+        }
+        if (Map[i][j] == "S") {
+          if (PlayerX>j*Shortest/Size && PlayerX<(j+1)*Shortest/Size && PlayerY>i*Shortest/Size && PlayerY<(i+1)*Shortest/Size) {
+            Air-=0.1;
+          }
+          //image(Stars, j*width/Size, i*height/Size, width/Size, height/Size);
+        }
+        if (Map[i][j] == "F" && MapUpdated == false) {
+          fill(255);
+          //rect(j*width/Size,i*height/Size,width/Size,height/Size);
+          if (i == 0 || j == 0 || j == Size-1) {
+
+            image(Wall, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+          } else {
+            if (/*MapTextures[i][j] == "Floor" || */Map[(i+1)][j] != "S" && Map[(i-1)][j] != "S" && Map[i][(j+1)] != "S" && Map[i][(j-1)] != "S") {
+              //MapTextures[i][j] = "Floor";
+              image(Metal, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else if (/*MapTextures[i][j] == "Corner1" || */Map[(i+1)][j] != "S" && Map[(i-1)][j] == "S" && Map[i][(j+1)] == "S" && Map[i][(j-1)] != "S") {
+              //MapTextures[i][j] = "Corner1";
+              image(Corner1, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else if (/*MapTextures[i][j] == "Corner2" || */Map[(i+1)][j] == "S" && Map[(i-1)][j] != "S" && Map[i][(j+1)] == "S" && Map[i][(j-1)] != "S") {
+              //MapTextures[i][j] = "Corner2";
+              image(Corner2, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else if (/*MapTextures[i][j] == "Corner3" || */Map[(i+1)][j] == "S" && Map[(i-1)][j] != "S" && Map[i][(j+1)] != "S" && Map[i][(j-1)] == "S") {
+              //MapTextures[i][j] = "Corner3";
+              image(Corner3, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else if (/*MapTextures[i][j] == "Corner4" || */Map[(i+1)][j] != "S" && Map[(i-1)][j] == "S" && Map[i][(j+1)] != "S" && Map[i][(j-1)] == "S") {
+              //MapTextures[i][j] = "Corner4";
+              image(Corner4, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else if (/*MapTextures[i][j] == "Wall" || */Map[i][(j+1)] != "S" && Map[i][(j-1)] != "S" && Map[(i-1)][j] == "S" || Map[(i+1)][j] == "S") {
+              //MapTextures[i][j] = "Wall";
+              image(Wall, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else  if (/*MapTextures[i][j] == "Wall" || */Map[i][(j+1)] != "S" && Map[i][(j-1)] != "S" && Map[(i+1)][j] == "S" || Map[(i-1)][j] == "S") {
+              //MapTextures[i][j] = "Wall";
+              image(Wall, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            }
+            //j = X i = Y
+            else if (Map[i][(j+1)] != "F" || Map[i][(j-1)] != "F" && Map[(i-1)][j] == "F" || Map[(i+1)][j] == "F") {
+
+              image(Wall2, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else  if (Map[i][(j+1)] != "F" || Map[i][(j-1)] != "F" && Map[(i+1)][j] == "F" || Map[(i-1)][j] == "F") {
+              image(Wall2, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            }
+
+
+            if (DebugMode == true) {
+              fill(255, 0, 0, 60);
+              rect((j+1)*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);  
+              rect((j-1)*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);  
+              rect(j*Shortest/Size, (i-1)*Shortest/Size, Shortest/Size, Shortest/Size);  
+              rect(j*Shortest/Size, (i+1)*Shortest/Size, Shortest/Size, Shortest/Size);
+              fill(255);
+              ellipse((j+1)*Shortest/Size, (i+1)*Shortest/Size, 10, 10);
+            }
+          }
+
+          if (PlayerHealth<0.1) {
+            if (Deathloop1 == true) {
+              DeathFade = second();
+              Deathloop1 = false;
+            }
+            //DeathFade--;
+
+
+            if (second() >= DeathFade+3 || FirstBoot == true) {
+              PlayerX = ((j+1)*Shortest/Size)-1;
+              PlayerY = ((i+1)*Shortest/Size)-1;
+              GoToX = PlayerX;
+              GoToY = PlayerY;
+              PlayerHealth = MaxHealth;
+              Air = MaxAir;
+              DeathFade = 2000;
+              DeathNum = -1; 
+              Deathloop1 = true;
+              FirstBoot = false;
+            }
+          }
+          // if (GoToX>j*width/Size && GoToX<(j+1)*width/Size && GoToY>i*height/Size && GoToY<(i+1)*height/Size && PMode == "Move") {
+          int NextX;
+          int NextY;
+          //up down right left
+
+          //  }
+
+          if ((PlayerX>j*Shortest/Size && PlayerX<(j+1)*Shortest/Size && PlayerY>i*Shortest/Size && PlayerY<(i+1)*Shortest/Size) == true) {
+            if (Air<MaxAir) {
+              Air+=0.1;
+            }
+          }
+        } else if (Map[i][j] == "G") {
+          image(Glass, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+        } else if (Map[i][j].equals("CS")) {
+          image(ControlStation, j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+        }
+      }
+    }
+  } else if (OnPlanet == "Planet1") {
+    if (time > 100000) {
+      background(0, 0, 0);
+      if (AntiLag == false) {
+        for (BackgroundOBJ mod : mods) {
+          mod.BackgroundStuff();
+        }
+      }
+    } else {
+      background(20, 20, 200);
+    }
+
+    if (time > Shortest-Shortest && time < Shortest*100) {
+
+      for (int i = 0; i < height; i++) {
+        //stroke(i/height,0,0);
+        noStroke();
+        fill(i/darkFader, 0, 0, time/(Shortest/8));
+        rect(0, i*10, width, 10);
+      }
+      darkFader+=0.002;
+    } else {
+      darkFader = 0;
+    }
+
+
+
+    //moon & sun
+    if (time < Shortest-100) {
+      fill(255, 209, 41);
+      ellipse(round(time), round(time), 80, 80);
+    } else {
+      fill(250, 250, 250);
+      ellipse(round(time)/ width, round(time)/ width, 80, 80);
+    }
+
+
+
+    for (int i = 0; i < Size; i++) {
+      for (int j = /*abs(PlanetXScroller[0])/PlanetX[0]*/0; j < /*(*/PlanetX[0]/* + abs(PlanetXScroller[0])/PlanetX[0])*/; j++) {
+        //AddToLog("X : "+PlanetXScroller[0]/PlanetX[0]);
+        //ellipse(PlanetXScroller[0]/PlanetX[0],20,10,10);
+        //j < 40 && j > 0 && j < PlanetX[0] + abs(PlanetXScroller[0]/PlanetX[0]) && j > -PlanetX[0]/2 - PlanetXScroller[0]/PlanetX[0]
+        if (j < 40 && j > 0 && j < abs(width/PlanetX[0]) + abs(PlanetXScroller[0]/PlanetX[0])-ScreenAdjust/2 && j > -PlanetX[0]/2 - PlanetXScroller[0]/PlanetX[0]+ScreenAdjust) {
+          if (planet1[i][j] == "D") {
+            if (DebugMode) {
+              //ellipse(10, i*height/Size, 10, 10);
+            }
+            fill(131, 53, 53);
+            stroke(131, 53, 53);
+
+            image(Dirt, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size+1, Shortest/Size+1);
+            //line(j*width/Size, i*height/Size, j*width/Size+width/Size, i*height/Size+height/Size);
+          }
+          if (planet1[i][j] == "S") {
+            fill(255, 251, 113);
+            stroke(255, 251, 113);            
+            image(Sand, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size+1, Shortest/Size+1);
+            if (EOpened == false && HoldTime > 2 &&  mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+              if (ToolType == "Fist" || ToolType == "Shovel") {
+                planet1[i][j] = "D";
+                Giveitem("Sand");
+              }
+            }
+          } else if (planet1[i][j] == "Glass") {
+            image(Glass, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size+1, Shortest/Size+1);
+            if (EOpened == false && HoldTime > 2 &&  mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+              if (ToolType == "Fist") {
+                planet1[i][j] = " ";
+                Giveitem("Glass");
+              }
+            }
+          } else if (planet1[i][j].equals("W")) {
+
+            if (EOpened == false && mousePressed &&  mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+
+              Giveitem("Water");
+              planet1[i][j] = " ";//do this
+            }
+            image(H2O, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+          } else if (planet1[i][j].equals("w")) {
+            fill(0, 0, 255, 200);
+            stroke(0, 0, 255, 200);
+            rect(j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            try {
+              if (planet1[i][j+1].equals(" ")) {
+                planet1[i][j+1] = "w";
+              } else if (planet1[i][j-1].equals(" ")) {
+                planet1[i][j-1] = "w";
+              } else if (planet1[i+1][j].equals(" ")) {
+                planet1[i+1][j] = "w";
+              }
+            } 
+            catch(Exception e) {
+              AddToLog("Water tried going out of bounds");
+              AddToLog("Error: "+ e);
+            }
+
+            //water
+            if (OnPlanetPlayerX - PlanetXScroller[0] >= j*Shortest/Size && OnPlanetPlayerX - PlanetXScroller[0] <= j*Shortest/Size + Shortest/Size && OnPlanetPlayerY+30 >= i*Shortest/Size && OnPlanetPlayerY+30 <= i*Shortest/Size + Shortest/Size) {
+              FallSpeed = 0.4;
+              AddToLog("INWater "+second());
+
+              if (CraftSelected == 13 && HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                ReplaceItem("Bottle", "Spring-Water", false);
+                HoldTime = 0;
+                //Crafting = false;
+              } 
+              if (EOpened == true) {
+
+                if (Crafting) {
+                }
+              }
+            } else {
+              if (FallSpeed < PGrav[0]) {
+                FallSpeed +=0.001;
+              }
+            }
+          } else if (planet1[i][j].equals("l")) {
+            fill(255, 0, 0, 200);
+            stroke(255, 0, 0, 200);
+            rect(j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            try {
+              if (planet1[i][j+1].equals(" ")) {
+                planet1[i][j+1] = "l";
+              } else if (planet1[i][j-1].equals(" ")) {
+                planet1[i][j-1] = "l";
+              } else if (planet1[i+1][j].equals(" ")) {
+                planet1[i+1][j] = "l";
+              } else if (planet1[i][j+1].equals("S")) {
+                planet1[i][j+1] = "Glass";
+              } else if (planet1[i][j-1].equals("S")) {
+                planet1[i][j-1] = "Glass";
+              } else if (planet1[i+1][j].equals("S")) {
+                planet1[i+1][j] = "Glass";
+              }
+            } 
+            catch(Exception e) {
+              AddToLog("Water tried going out of bounds");
+              AddToLog("Error: "+ e);
+            }
+
+            //water
+            if (OnPlanetPlayerX - PlanetXScroller[0] >= j*Shortest/Size && OnPlanetPlayerX - PlanetXScroller[0] <= j*Shortest/Size + Shortest/Size && OnPlanetPlayerY+30 >= i*Shortest/Size && OnPlanetPlayerY+30 <= i*Shortest/Size + Shortest/Size) {
+              FallSpeed = 0.4;
+              AddToLog("INWater "+second());
+
+              if (CraftSelected == 13 && HoldTime > 0 && mouseX > width/5*3+(width/6)/4 && mouseX < (width/5*3+(width/6)/4) + width/6 && mouseY > height-250 && mouseY < (height-150)) {
+                ReplaceItem("Bottle", "Spring-Water", false);
+                HoldTime = 0;
+                //Crafting = false;
+              } 
+              if (EOpened == true) {
+
+                if (Crafting) {
+                }
+              }
+            } else {
+              if (FallSpeed < PGrav[0]) {
+                FallSpeed +=0.001;
+              }
+            }
+          } else if (planet1[i][j].equals("L")) {
+            if (planet1[i-1][j].equals(" ")) {
+              image(WoodTop, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            } else {
+              image(Wood, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            }
+            if (EOpened == false && HoldTime > 10 &&  mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+              if (ToolType == "Fist" || ToolType == "Axe") {
+                Giveitem("Wood");
+                planet1[i][j] = " ";//do this
+                HoldTime = 0;
+              } else if (ToolType == "Pickaxe") {
+                Giveitem("Sap");
+                HoldTime = 0;
+              }
+            }
+            if (planet1[i+1][j].equals(" ")) {
+              //Tree Log fall speed
+              if (FallingTime == true && millis() % 2 == 0) {
+                if (planet1[i+1][j] == " ") {
+                  planet1[i+1][j] = "L";
+                  planet1[i][j] = " ";
+                }
+              }
+            }
+          } else if (planet1[i][j].equals("P")) {
+            image(Plant, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            //falling leaves
+            try {
+              if (planet1[i][j-1] != "L" && planet1[i][j+1] != "L" && planet1[i-1][j] != "L" && planet1[i+1][j] != "L" ) {
+                //Tree Leaves fall speed
+                if (FallingTime == true && millis() % 2 == 0) {
+                  if (planet1[i+1][j] == " ") {
+                    planet1[i+1][j] = "P";
+                    planet1[i][j] = " ";
+                  }
+                }
+              } else if (planet1[i-1][j] == "L") {
+                planet1[i][j] = " ";
+              }
+
+              //tree grow
+              if (planet1[i][j-1].equals("P") && planet1[i][j+1].equals("P") &&  planet1[i-1][j].equals("P") && round(random(200)) == 1) {
+                if (i > 5 ) {
+                  planet1[i+1][j-1] = " ";
+                  planet1[i+1][j+1] = " ";
+                  //planet1[i-1][j] = " ";
+                  planet1[i][j] = "L";
+
+                  planet1[i-1][j-1] = "P";
+                  planet1[i-1][j+1] = "P";
+                  planet1[i-2][j] = "P";  
+                  planet1[i-1][j] = "P";
+                } else {
+                  int randomGrowX = round(random(3));
+                  if (round(random(10)) == 1 && i < PlanetX[0]-6-randomGrowX && frameRate > 20) {
+
+                    planet1[i][j+3+randomGrowX] = "SEED";
+                  } else {
+                  }
+                }
+              }
+            }
+            catch(Exception e) {
+              AddToLog("Error: "+e);
+            }
+            if (EOpened == false && HoldTime > 2 &&  mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+              Giveitem("Leaf");
+              if (round(random(1)) == 0) {
+                Giveitem("Seed");
+              }
+              planet1[i][j] = " ";//do this
+              HoldTime = 0;
+            }
+          } else if (planet1[i][j] == "A") {
+            image(AlienTech, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+          } else if (planet1[i][j] == "E") {
+            fill(second()/60, millis()/60, second()/60);
+            rect(j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            if (OnPlanetPlayerX - PlanetXScroller[0] >= j*Shortest/Size && OnPlanetPlayerX - PlanetXScroller[0] <= j*Shortest/Size + Shortest/Size && OnPlanetPlayerY+30 >= i*Shortest/Size && OnPlanetPlayerY+30 <= i*Shortest/Size + Shortest/Size) {
+              if (keyPressed && key == 'q' || key == 'Q') {
+                OnPlanet = "Planet1Alean";
+              }
+            }
+          } else if (planet1[i][j] == "SEED") {
+            try {
+              fill(0);
+              rect(j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+              if (FallingTime == true && millis() % 2 == 0) {
+                if (planet1[i+1][j] == " ") {
+                  planet1[i+1][j] = "SEED";
+                  planet1[i][j] = " ";
+                } else {
+                  if (planet1[i+1][j] == "D") {
+                    planet1[i][j] = "L";
+                    planet1[i-1][j] = "L";
+
+                    planet1[i-1][j-1] = "P";
+                    planet1[i-1][j+1] = "P";
+                    planet1[i-2][j] = "P";      
+
+                    planet1[i-2][j-1] = "P";
+                    planet1[i-2][j+1] = "P";
+                    planet1[i-3][j] = "P";
+                  } else {
+                    planet1[i][j] = " ";
+                  }
+                }
+              }
+            }
+            catch(Exception e) {
+              AddToLog("Error: "+e);
+            }
+          } else if (planet1[i][j].equals("s")) {
+            fill(#898787);
+            rect(j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            if (EOpened == false && mousePressed &&  mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+
+              if (random(10) > 5) {
+                Giveitem("Gold");
+                Giveitem("Stone");
+              } else {
+                Giveitem("Stone");
+              }
+              planet1[i][j] = " ";
+            }
+          } else if (planet1[i][j].equals("GW")) {
+            image(GoldWire, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+          } else if (planet1[i][j].equals("GWA")) {
+            image(GoldWireActive, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            if(DebugMode == true){
+              text(planet1Tags[i][j], j*Shortest/Size + PlanetXScroller[0], (i*Shortest/Size)+20);
+            }
+            String[] PowerTags = split(planet1Tags[i][j], ' ');
+            try {
+              AddToLog(PowerTags[0]+ " "+ PowerTags[1] + " "+ PowerTags[2] + " "+ PowerTags[3] );
+              print(planet1Tags[i][j] + "\n");
+              if (planet1[int(PowerTags[0])][int(PowerTags[1])].equals("Battery") || planet1[int(PowerTags[0])][int(PowerTags[1])].equals("LeverOn")) {
+                if (planet1[int(PowerTags[2])][int(PowerTags[3])].equals("GWA") || planet1[int(PowerTags[2])][int(PowerTags[3])].equals("Battery") || planet1[int(PowerTags[0])][int(PowerTags[1])].equals("LeverOn")) {
+
+
+                  if (planet1[i-1][j].equals("GW")) {
+                    planet1[i-1][j] = planet1[i][j];
+                    planet1Tags[i-1][j] = planet1Tags[i][j];
+                    planet1Tags[i-1][j] = PowerTags[0] +" "+ PowerTags[1]+ " " + i + " " + j;
+                  } else if (planet1[i+1][j].equals("GW")) {
+                    planet1[i+1][j] = planet1[i][j];
+                    planet1Tags[i+1][j] = planet1Tags[i][j];
+                    planet1Tags[i+1][j] = PowerTags[0] +" "+ PowerTags[1]+ " " + i + " " + j;
+                  } else if (planet1[i][j-1].equals("GW")) {
+                    planet1[i][j-1] = planet1[i][j];
+                    planet1Tags[i][j-1] = planet1Tags[i][j];
+                    planet1Tags[i][j-1] = PowerTags[0] +" "+ PowerTags[1]+ " " + i + " " + j;
+                  } else if (planet1[i][j+1].equals("GW")) {
+                    planet1[i][j+1] = planet1[i][j];
+                    planet1Tags[i][j+1] = planet1Tags[i][j];
+                    planet1Tags[i][j+1] = PowerTags[0] +" "+ PowerTags[1]+ " " + i + " " + j;
+                  }
+
+
+                  //planet1Tags[i][j] = planet1Tags[i][j] + " " + i + " "+ j;
+                } else {
+                  planet1[i][j] = "GW";
+                }
+              } else {
+                planet1[i][j] = "GW";
+              }
+            }
+            catch(Exception e) {
+              try {
+                AddToLog("Power Out Of Bounds: "+PowerTags[2] +" "+ PowerTags[3]);
+              }
+              catch(Exception e2) {
+                AddToLog(PowerTags[0] +" "+ PowerTags[1]+ "Power Out Of Bounds*2:" + e2);
+              }
+            }
+          } else if (planet1[i][j].equals("Battery")) {
+
+            image(Battery, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            if (planet1[i-1][j].equals("GW")) {
+              planet1Tags[i-1][j] = i+" "+j + " " + i + " "+ j;
+              planet1[i-1][j] = "GWA";
+            }
+          } else if (planet1[i][j].equals("LeverOn")) {
+            if(MousePressed == true && mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size){
+              planet1[i][j] = "LeverOff";
+            }
+            
+            int Location = 0;
+            String[] PowerTags1 = split(planet1Tags[i][j], ' ');
+            if(DebugMode == true){
+              text(planet1Tags[i][j], j*Shortest/Size + PlanetXScroller[0], (i*Shortest/Size)+20);
+            }
+            image(LeverOn, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            try {
+              if (planet1[int(PowerTags1[3])][int(PowerTags1[2])].equals("GW") || planet1[int(PowerTags1[3])][int(PowerTags1[2])].equals("GWA")) {
+                planet1[int(PowerTags1[3])][int(PowerTags1[2])] = "GWA";
+                String[] PowerTags2 = split(planet1Tags[i][j], ' ');
+
+                if (planet1[i][j+1].equals("GWA")) {
+                  Location = 1;
+                } else if (planet1[i][j-1].equals("GWA")) {
+                  Location = -1;
+                }
+
+
+
+                if (Location == -1) {
+                  PowerTags2 = split(planet1Tags[i][j+1], ' ');
+                } else {
+                  PowerTags2 = split(planet1Tags[i][j-1], ' ');
+                }
+                planet1Tags[i][j+Location] = i + " "+ j + " "+PowerTags2[3] + " " + PowerTags2[2];
+              }
+            }
+            catch(Exception e1) {
+              AddToLog("ERR "+e1);
+              try {
+                planet1Tags[i][j] = PowerTags1[0] + " " + PowerTags1[1] + " ";
+                if (planet1[i][j+1].equals("GWA")) {
+                  planet1Tags[i][j] = PowerTags1[0] + " " + PowerTags1[1] + " " + (j-1)+" "+i;
+                  Location = -1;
+                } else if (planet1[i][j-1].equals("GWA")) {
+                  planet1Tags[i][j] = (j+1)+" "+i + " " + PowerTags1[2] + " " + PowerTags1[3];
+                  Location = 1;
+                }
+              }
+              catch(Exception e) {
+                if (planet1[i][j+1].equals("GWA")) {
+                  planet1Tags[i][j] = (j+1)+" "+i + " " + (j-1)+" "+i;
+                } else if (planet1[i][j-1].equals("GWA")) {
+                  planet1Tags[i][j] = (j-1)+" "+i + " " + (j+1)+" "+i;
+                }
+              }
+            }
+          } else if (planet1[i][j].equals("LeverOff")) {
+            if(MousePressed == true && mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size){
+              planet1[i][j] = "LeverOn";
+            }
+            if(DebugMode == true){
+              text(planet1Tags[i][j], j*Shortest/Size + PlanetXScroller[0], (i*Shortest/Size)+20);
+            }
+            image(LeverOff, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+            
+             
+             
+          }else if (planet1[i][j] == " ") {
+            if (EOpened == false && mousePressed &&  mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseX<((j+1)*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size && mouseY<(i+1)*Shortest/Size) {
+              if (PlanetBuild == "Seed") {
+                planet1[i][j] = "SEED";
+                Inventory[Selected] = "";
+                PlanetBuild = "";
+              } else if (PlanetBuild == "SummonLightning") {
+                Striking = true;
+              } else if (PlanetBuild.equals("Gold-Wire")) {
+                planet1[i][j] = "GW";
+              } else if (PlanetBuild.equals("Battery")) {
+                planet1[i][j] = "Battery";
+              } else if(PlanetBuild.equals("Lever")){
+                planet1[i][j] = "LeverOn";
+              }
+            }
+          }
+
+
+
+          // ROCKET
+          else if (planet1[i][j] == "R") {
+            //fill(20, 20, 200);
+            //stroke(20, 20, 200);
+            //rect(j*Shortest/Size, i*Shortest/Size, Shortest/Size, Shortest/Size);
+            if (TakingOff == false) {
+              image(Rocket, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size-(Rocket.height), Rocket.width*1.5, Rocket.height*1.5);
+            } else {
+              if (!BlastOff.isPlaying() && Muted == false) {
+                BlastOff.play();
+              }
+              for (int ik = 0; ik < 200; ik++) {
+                //Smoke p = new Smoke();
+                //p.animate(j*width/Size+(RocketTakeOff.width/2),round((i*height/Size-(Rocket.height))-FlyHeight),20,2,10);
+
+                //smoke.add(p);
+                // Each particle's PShape gets added to the System PShape
+                //particleShape.addChild(p.getShape());
+              }
+
+
+              Smoke.animate((j*Shortest/Size+(RocketTakeOff.width/2)) + PlanetXScroller[0], round((i*Shortest/Size-(Rocket.height))-FlyHeight), 20, 2, 10);
+
+              image(RocketTakeOff, j*Shortest/Size + PlanetXScroller[0], (i*Shortest/Size-(Rocket.height))-FlyHeight, Rocket.width*1.5, Rocket.height*1.5);
+              FlyHeight += 10;
+              OnPlanetPlayerX = j*Shortest/Size+Rocket.width-Rocket.width/4 + PlanetXScroller[0];
+              OnPlanetPlayerY = (i*Shortest/Size-(Rocket.height/2)-FlyHeight);            
+              if (FlyHeight>height) {
+                OnPlanet = "SpaceBase";
+                FlyHeight = 0;
+                TakingOff = false;
+              }
+            }
+
+            if (mousePressed && mouseX>(j*Shortest/Size) + PlanetXScroller[0] && mouseY>i*Shortest/Size-(Rocket.height) && mouseX<(j*Shortest/Size+Rocket.width*1.5) + PlanetXScroller[0] && mouseY<i*Shortest/Size-(Rocket.height)+Rocket.height*1.5) {
+              TakingOff = true;
+            }
+
+            if (Striking == true) {
+              line(0, 0, width/2, height/2);
+              background(#FFFB71);
+              ReplaceItem("Sand", "Glass", true);
+              Inventory[Selected] = "";
+              Striking = false;
+              PlanetBuild = "";
+            }
+          }
+        }
+      }
+    }
+
+
+    if (time/Shortest < 200) {
+      fill(0, 0, 0, time/width);
+    } else {
+      fill(0, 0, 0, 200);
+    }
+    //darkness
+    rect(-1, -1, width+2, height+2);
+  } else if (OnPlanet == "Planet1Alean") {
+    for (int i = 0; i < Size; i++) {
+      for (int j = 0; j < PlanetX[0]; j++) {
+        //image(WallBackground1, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+        if (Room[i][j] == "F") {
+          image(WallBackground1, j*Shortest/Size + PlanetXScroller[0], i*Shortest/Size, Shortest/Size, Shortest/Size);
+        }
+      }
+    }
+  }
+  if (mousePressed) {
+    FallingTime = false;
+  } else {
+    FallingTime = true;
+  }
+}
+void Meteor() {
+  if (MShown == true) {
+    image(ScrapMetal, MX, MY, width/20, height/10);
+
+    MX+=7;
+    MY+=7;
+    //print(" "+MX+" ");
+    if (MX> 1090) {
+      MX = 0;
+      MY = 0;
+      MShown = false;
+      Mreset = true;
+    }
+    if (mousePressed && mouseX>MX && mouseY>MY && mouseX<MX+width/20 && mouseY<MY+height/10) {
+      Giveitem("Metal");
+      MShown = false;
+      Mreset = true;
+      MX = 0;
+      MY = 0;
+    }
+  }
+  if (Mreset == true) {
+    AstroidWait(round(random(50000, 100000))); 
+    //int MRand = round(random(0,10)); 
+
+    MresetTic++;
+  }
+  if (TimeUp1) {
+    AstroidWait(round(random(50000, 100000))); 
+    //meatior reset
+    MShown = true;
+    Mreset = false;
+  }
+}
+//end of functions
+//code for later use
+
+
+
+float FrameRate = 0;
+float AvrgFPS = 0;
+
+void draw() {
+  clear();
+  if (AntiLag == false) {
+    for (BackgroundOBJ mod : mods) {
+      mod.BackgroundStuff();
+    }
+  }
+  for (Item Items : Items) {
+    //Items.Update();
+  }
+  //alternative mouse pressed experaments
+  if (mousePressed) {
+    PressWait(1000);
+  } else {
+    Mouse = true;
+  }
+  if (TimeUp3 == true) {
+    if (mousePressed) {
+      Mouse = false;
+    } else {
+      Mouse = true;
+    }
+    TimeUp3 = false;
+  }
+
+  if (Page == "Play") {
+
+    Update(true);
+    fill(255);
+    if (frameRate<15) {
+      fill(255, 0, 0);
+    }
+    AvrgFPS = (FrameRate+AvrgFPS)/2;
+    FrameRate = frameRate;
+
+    fill(255);
+    Map();
+    if (OnPlanet == "SpaceBase") {
+      if (!BackgroundAmbient.isPlaying() && Muted == false) {
+        BackgroundAmbient.play();
+      }
+
+      Meteor();
+      Player(PlayerX, PlayerY);
+    } else {
+      Npc.Move();
+      Npc2.Move();
+      Player(round(OnPlanetPlayerX), round(OnPlanetPlayerY));
+    }
+    //onscreen UI's
+    inventory();
+    //death message
+    if (PlayerHealth<=0) {
+      fill(255, 255, 255);
+      rect(0, 0, width, height);
+      fill(0, 0, 0);
+
+      if (DeathNum == -1) {
+        DeathNum = round(random(17))+1;
+      }
+
+      text(DeathComments[DeathNum], width/2-(DeathComments[DeathNum].length()*4), height/2);
+    }
+    fill(255);
+    if (PMode == "Build" && EOpened == false) {
+      text("Press O[Build] & P[Select] to change from build, to select mode!", 10, height-200);
+    }
+    text(HoldTime, mouseX, mouseY);
+    text("FPS:"+frameRate + "      Avrage FPS: "+ AvrgFPS+" KeyPressed: "+ key + " PModeL: " + PMode, 0, 10);
+  } else if (Page == "Menu") {
+    //image(Astro,-100,-100);
+    Menu(true);
+    fill(255);
+    text("FPS:"+frameRate+"\n V:"+V + "    " + UpToDate, 0, 10);
+    
+    text(UpToDate,50,height-80);
+  } else if (Page == "Loading") {
+    image(Poster2, 0, 0, width, height);
+    Page = "Menu";
+  }
+
+  if (keyCode == ALT) {
+    DebugMode = false;
+  }
+  if (DebugMode) {
+    for (int i = 0; i<9; i++) {
+      //rect(100,0,100,100);
+      fill(255);
+      textFont(ArialMT48, 20);
+      text(i+". "+Log[i], width/2, (i*20)+height-250);
+    }
+  }
+
+  if (showingText == true && EOpened == false) {
+    fill(255);
+    text(Says, 100, width/2);
+  }
+  if (keyPressed) {
+    showingText = false;
+  }
+  MousePressed = false;
+}
+
+void mouseClicked() {
+  BuildNow = true;
+  MousePressed = true;
+}
+
+
+
+
+
+class BackgroundOBJ{
+  int X = round(random(width));
+  int Y = round(random(height));
+  int size = round(random(5));
+  int RandomColor = round(random(500));
+  
+  int ShootingX = 0;
+  int ShootingY = 0;
+  int Shooter = 0;
+  //int fade = 0;
+  void BackgroundStuff(){
+    fill(255);
+    if(RandomColor == 1){
+      image(SpaceColor,X,Y);
+    }else if(RandomColor > 1 && RandomColor < 5){
+      //image(Star,X,Y , size*15, size*15);
+      //image(ShootingStar,ShootingX,ShootingY , size*45, size*45);
+      stroke(255);
+      strokeWeight(3);
+      line(ShootingX, ShootingY , ShootingX+size*10,ShootingY+size*10);
+      if (millis() % 2 == 0) {
+        ShootingX+=Shortest/10;
+        ShootingY+=Shortest/10;
+      }
+      
+      if(Shooter == 1){
+        ShootingX = round(random(width));
+        ShootingY = 0;
+      }
+      Shooter = round(random(10));
+      strokeWeight(1);
+      stroke(0);
+    }else if(RandomColor > 20  && RandomColor < 30){
+      if(((second()) + round(random(4))) % 8 == 0){
+        fill(255);
+        ellipse(X, Y, size, size);
+      }
+    }else{
+      fill(255);
+      ellipse(X, Y, size, size);
+    }
+    
+  }
+  
+}
+
+
+
+
+
+
+class Item {
+
+  
+  int itemX = 0;
+  int itemY = 0;
+  String itemType = "";
+  String Location = "";
+
+  void ItemCreate() {
+    
+    if(!DroppedItem.equals("")){
+      if(itemType.equals("")){
+        itemType = DroppedItem;
+        itemX = DroppeditemX;
+        itemY = DroppeditemY;
+        Location = OnPlanet;
+        DroppedItem = "";
+      }
+    } 
+  }
+  
+  void Update() {
+        if(Location.equals(OnPlanet)){
+    if (!itemType.equals("")) {
+      switch(itemType) {
+      case "Steel":
+      AddToLog("Dropped Steel");
+        image(Unknown, itemX, itemY);
+        break;
+       default:  
+        image(Unknown, itemX, itemY);
+       break;
+        
+        
+      }
+    }
+  }
+  }
+  
+}
+
+
+
+
+
+
+
+public class Npc{
+  private int ScreenNpcX = 1000;
+  private int ScreenNpcY = 800;  
+  
+  private int NpcX[] = {1000};
+  //private Float NpcY[] = {random(height)};
+  
+  
+  private int NPCairTime = 200;
+  private int randomChoose = 0;
+  private String Do = "FollowPlayer";
+  private int type = round(random(2));
+  
+  private int M = 0;
+  private int time = 0;
+  private boolean Ready = false;
+  private boolean NPCOnGround = false;
+  int WalkerRandTimer = 40;
+  private int downtime = 0;
+  
+  public void Move(){
+    
+     if(random(80) > 40){
+        WalkerRandTimer++;
+     }else{
+        WalkerRandTimer--;   
+     }
+     
+     
+     if(WalkerRandTimer > 80){
+      WalkerRandTimer = 0; 
+     }else if(WalkerRandTimer < -80){
+      WalkerRandTimer = 0; 
+     }
+    if(WalkerRandTimer > 40){
+      NpcX[0] ++;
+    }else if(WalkerRandTimer < 40){
+      NpcX[0] --;
+    }else{
+      
+    }
+    
+      
+      
+      
+      
+      ScreenNpcX = NpcX[0] + PlanetXScroller[0];
+    // - PlanetXScroller[0] - 100
+    // - PlanetXScroller[0] - (offset 100)
+    for (int i = 0; i < Size; i++) {
+      for (int j = 0; j < PlanetX[0]; j++) {
+        //gravity
+        //rect(ScreenNpcX - NpcX[0],ScreenNpcY+30 ,100,100);
+        
+        if (planet1[i][j] == "D" || planet1[i][j] == "S") {
+          //gravity
+//          if (ScreenNpcX - PlanetXScroller[0] >= j*Shortest/Size && ScreenNpcX - PlanetXScroller[0] <= j*Shortest/Size + Shortest/Size && ScreenNpcY+30 >= i*Shortest/Size && ScreenNpcY+30 <= i*Shortest/Size + Shortest/Size) {
+
+            
+          ellipse(ScreenNpcX, ScreenNpcY,10,10);
+          //if ((ScreenNpcX >= (j+2)*Shortest/Size && ScreenNpcX <= (j+3)*Shortest/Size && ScreenNpcY >= i*Shortest/Size)) {
+          if (ScreenNpcX - PlanetXScroller[0] >= j*Shortest/Size && ScreenNpcX - PlanetXScroller[0] <= j*Shortest/Size + Shortest/Size && ScreenNpcY >= i*Shortest/Size && ScreenNpcY <= i*Shortest/Size + Shortest/Size) {
+            NPCOnGround = true;
+            //pushes him up
+          }
+          
+          
+          
+          
+         
+        }
+      }
+    }    
+      if (NPCOnGround == true) {
+        //NPCairTime = 200;
+        ScreenNpcY-=PGrav[0];
+        NPCOnGround = false;
+      } else {
+        ScreenNpcY+=PGrav[0];
+       
+        //NPCairTime -=50;
+      }
+
+    fill(255,0,0);
+    image(IdlePlayer, ScreenNpcX-IdlePlayer.width/2, (ScreenNpcY-IdlePlayer.height)+30);
+    //image(IdlePlayer,ScreenNpcX, ScreenNpcY-IdlePlayer.height);
+    //image(IdlePlayer, (round(NpcX)-Unknown.width/2)+PlanetXScroller[0],round(NpcY)-Unknown.width/2);
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+public class Smoke{
+ 
+ 
+  int lifetime;
+  
+  //int maxlife = 40;
+  
+  int X;
+  int Y;
+  int XVel = round(random(4));
+  int YVel = -10;
+  
+  boolean First = false;
+  
+  public void animate(int StartX, int StartY, int maxlife, int type, int Yvel){
+      if(First == false){
+        First = true; 
+        X = StartX;
+        Y = StartY;
+        lifetime = round(random(maxlife));
+        YVel = Yvel;
+      }
+      XVel = round(random(4));
+    if(type == 1){
+
+      if(lifetime < maxlife){
+        lifetime++;
+        if(random(2) >1){
+          X += XVel;
+        }else{
+          X -= XVel;
+        }
+        Y += YVel;
+        ellipse(X, Y, 10, 10);
+      }else{
+        First = false;
+        
+      }
+      
+    }else if(type == 2){
+      if(lifetime < maxlife){
+        lifetime++;
+        if(random(2) >1){
+          X += XVel;
+        }else{
+          X -= XVel;
+        }
+        Y += YVel;
+        image(SmokePart,X-SmokePart.width/4,Y);
+      }else{
+        First = false;
+        
+      }      
+      
+    }
+  }
+  
+
+}
